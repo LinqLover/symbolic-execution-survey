@@ -6,3 +6,7 @@ Created in the [research seminar on Advanced Programming Tools](https://hpi.de/e
 ## Goals
 
 Prepare a **presentation/lecture (1 h) followed by a discussion (30 min)** and a **written report (8 – 12 pages).** See all details in [INSTRUCTIONS.md](INSTRUCTIONS.md).
+
+## Notes
+
+All findings from the literature research can be found in [notes/](./notes/).

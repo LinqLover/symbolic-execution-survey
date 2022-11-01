@@ -1,0 +1,3 @@
+# Symbolic Execution – Findings
+
+## Applications
