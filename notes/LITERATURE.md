@@ -21,6 +21,15 @@ Notes:
 
 ### Research workflow
 
+#### Recurring entry points
+
+- read literature items that are unchecked/to be skimmed/to be read in-depth
+- find further sources
+- investigate examples
+- define items in glossary
+
+#### Reading workflow (per item)
+
 ```mermaid
 stateDiagram-v2
       [*] --> unchecked
