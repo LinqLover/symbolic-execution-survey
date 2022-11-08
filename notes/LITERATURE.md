@@ -47,6 +47,15 @@ stateDiagram-v2
 
 ---
 
+## CUTE
+
+Meta:
+
+- **Citation:** CUTE: A concolic unit testing engine for C
+- **Link:** <https://mir.cs.illinois.edu/marinov/publications/SenETAL05CUTE.pdf>
+- **Inbound references:** Wikipedia Concolic, Software Testing
+- **State:** unchecked
+
 ## DART
 
 Meta:
@@ -56,22 +65,27 @@ Meta:
 - **Inbound references:** Wikipedia Concolic, Software Testing
 - **State:** unchecked
 
-## CUTE
-
-Meta:
-
-- **Citation:** CUTE: A concolic unit testing engine for C
-- **Link:** <https://mir.cs.illinois.edu/marinov/publications/SenETAL05CUTE.pdf>
-- **Inbound references:** Wikipedia Concolic
-- **State:** unchecked
-
 ## KLEE
 
 Meta:
 
 - **Citation:** Cadar, C., Dunbar, D., & Engler, D. R. (2008, December). Klee: unassisted and automatic generation of high-coverage tests for complex systems programs. In *OSDI* (Vol. 8, pp. 209-224).
 - **Link:** <https://llvm.org/pubs/2008-12-OSDI-KLEE.pdf>
+- **Inbound references:** Software Testing
 - **State:** unchecked
+
+## Practical SMT Solving
+
+Meta:
+
+- **Citation:** Wang, J. Practical Satisfiability Modulo Theories (SMT) Solving. Information Security Club at San Jose State University, 2015-04-23.
+- **Link:** <https://www.youtube.com/watch?v=iljZWZzFu7k>
+- **Inbound references:** (none)
+- **State:** recognized
+
+Findings:
+
+- **Contributions:** basic overview of SMT solving approaches and tools
 
 ## Program Analysis Lecture
 
@@ -94,6 +108,19 @@ Meta:
 - **Inbound references:** Program Analysis Lecture
 - **State:** unchecked
 
+## SMT Learning
+
+Meta:
+
+- **Citation:** Balunović, M. (2021). Learning to Solve SMT Formulas. Theoretical Foundations of SAT/SMT Solving, Simons Institute for the Theory of Computing.
+- **Link:** https://simons.berkeley.edu/talks/learning-solve-smt-formulas
+- **Inbound references:** (none)
+- **State:** skimmed
+
+Findings:
+
+- **Contributions:** basic overview of SMT solving with ex advanced SMT techniques
+
 ## Software Testing
 
 Meta:
@@ -101,11 +128,11 @@ Meta:
 - **Citation:** Symbolic execution for software testing: three decades later. Cadar, Sen. Communications of the ACM. 2013.
 - **Link:** <https://people.eecs.berkeley.edu/~ksen/papers/cacm13.pdf>
 - **Inbound references:** provided entry points
-- **State:** to be read in-depth
+- **State:** absorbed
 
 Findings:
 
-- **Contributions:** in-depth overview of theory, challenges, and trends; references to surveys
+- **Contributions:** in-depth overview of theory, approaches, and challenges; collection of implementations; references to surveys (TODO)
 
 ## Testing Android Apps
 
