@@ -141,7 +141,22 @@ Meta:
 - **Citation:** Testing Android Apps Through Symbolic Execution. Mirzaei, Malek, Păsăreanu, Esfahani, Mahmood. ACM SIGSOFT Software Engineering Notes. 2012.
 - **Link:** <https://cs.gmu.edu/~smalek/papers/JPF2012.pdf>
 - **Inbound references:** provided entry points
-- **State:** unchecked
+- **State:** absorbed
+
+Learnings:
+
+- **Contributions:** solutions for practical symbolic execution for Android apps
+- Challenges for symbex with Android apps: different Java VM/bytecode set, path divergence problem (proprietary framework implementation), event-driven frameworks/Hollywood Principle
+- Solutions:
+  - **stubs/mocks** that model/emulate proprietary Android libraries -> compile to normal JVM bytecode set -> execute it in JPF (Java PathFinder) Symbolic PathFinder (SPF)
+  - **connect sub-call graphs** by parsing components from manifest
+  - **generate drivers** from sub-call graphs (event sequences to simulate user interaction)
+    - root nodes are invocated by system, connections between sub-call graphs by user events
+    - CFG (context-free grammar) model for sub-call graphs describes possible event sequences
+    - repeat until code coverage threshold is reached
+- Implementational remarks
+  - could not use reflection in stubs (not supported by JPF) -> reimplement stubs
+  - could not use regular hash maps for symbex (path explosion?) -> reimplment hash map
 
 ## Wikipedia Concolic
 

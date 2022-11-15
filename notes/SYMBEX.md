@@ -119,9 +119,9 @@ Solutions:
 - trade-off based on analysis goals (low-level vs high-level)
 - controlling: choice of concretized values (for instance, by excluding `MAX_INT`, `nullptr`, etc.)
 
-### Blackbox environment/nondeterministic behavior
+### Blackbox environment/nondeterministic behavior/path divergence
 
-Examples: syscalls, concurrency (multithreading, accelerators)
+Examples: syscalls, concurrency (multithreading, accelerators), frameworks (inversion of control)
 
 Solutions:
 
@@ -129,6 +129,7 @@ Solutions:
 - emulation (complex models)
 - fork environment (performance overhead)
 - pass concrete values from concolic execution/EGT (may miss some execution paths through environment)
+- heuristic approaches: combine symbex with sub-callgraphs/fuzzing (see „Testing Android Apps“)
 
 ### Constraint Solving
 
