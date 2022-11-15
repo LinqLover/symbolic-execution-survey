@@ -72,7 +72,35 @@ Meta:
 - **Citation:** Cadar, C., Dunbar, D., & Engler, D. R. (2008, December). Klee: unassisted and automatic generation of high-coverage tests for complex systems programs. In *OSDI* (Vol. 8, pp. 209-224).
 - **Link:** <https://llvm.org/pubs/2008-12-OSDI-KLEE.pdf>
 - **Inbound references:** Software Testing
-- **State:** unchecked
+- **State:** absorbed
+
+Findings:
+
+- **Contributions:** solution for bug detection, crash test generation, testing tool equivalence, and syscall fuzz testing; dealing with environments, bit-level accuracy, many optimization details; evaluation of impact for selected libraries
+- used to detect many tests in popular OSS such as linux coreutils and write regression tests
+- operates on LLVM bytecode (bit-level accurate), uses constraint solver STP
+- operation results are stored as symbolic expressions; clone (execution) state on symbolic jump conditions; implicit branches for dangerous operation (e.g., zero divison, dereference)
+- optimizations:
+  - distinct STP array for each object (less pressure on solver); implicit branch for symbolic pointers (seldom used)
+  - compact state representation: immutable map for heap with copy-on-write objects
+  - query optimizations: simplify expressions; simplify constraint sets; concretize values eagerly; split up independent constraints (for different parts of memory) for faster checking
+  - caches for subsets/supersets of constraint sets
+  - state scheduling: random path selection from binary tree of active states (favors shorter paths, avoids starvation from infinite forks), coverage-optimized search by weighting states with multiple heuristics alternately; time slicing per state
+- environment models (filesystem, networking, environment variables, …)
+  - small models to emulate syscalls, independent of klee‘s internals, extensible by user
+  - filesystem: forward concrete file accesses to real fs (doesn‘t this require isolation?), emulate others
+  - choose appropriate abstraction level for model (library vs syscall, performance vs implementational complexity)
+  - (optionally) simulate environment-related syscall failures (e.g., hardware failures)
+- generate regression tests for each failure
+  - no assertions/test oracle, just for reproduction of crashes through developer
+    - but developer can provide test oracle (reference implementation) and have klee compare both symbolically
+  - run with normal binaries in replay driver that provides defined environment behavior
+  - rerun each generated test to assure it fails
+- evaluation:
+  - 90% code coverage for coreutils
+    - TODO: why is coverage limited? seldom paths not yet reached due to time-outs? edge case not contained in models?
+  - runtime: open-ended? for programs 2K – 10K ELOC, still not terminated after 1h
+  - in comparison, random testing does not detect when everything is covered
 
 ## Practical SMT Solving
 
