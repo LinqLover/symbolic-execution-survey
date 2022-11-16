@@ -134,7 +134,24 @@ Meta:
 - **Citation:** Godefroid, P., Levin, M. Y., & Molnar, D. (2012). SAGE: Whitebox Fuzzing for Security Testing: SAGE has had a remarkable impact at Microsoft. *Queue*, *10*(1), 20-27.
 - **Link:** <https://dl.acm.org/doi/pdf/10.1145/2090147.2094081>
 - **Inbound references:** Program Analysis Lecture
-- **State:** unchecked
+- **State:** absorbed
+
+Findings:
+
+- **Contributions:** binary-based solution, some optimizations for concolic execution, performance and impact evaluation at Microsoft
+- SAGE = Scalable Automated Guided Execution
+- concolic testing for x86 binaries
+  - pro: considers compiler-caused behavioral changes („what you fuzz is what you ship“)
+- test generation: record trace for all environment events during symbolic execution, reapply events during test execution
+- optimizations:
+  - scheduling
+    - generational search (directed search instead BFS or DFS): negate constraints one-by-one
+    - rank constraint sets by new code coverage (in the first run, execute unsymbolically to measure code coverage only)
+    - supports parallel/distributed execution
+  - symbolic-expression caching, constraint simplification (e.g., for unrelated, redundant, or logically implied constraints)
+- evaluation:
+  - performance: 8h for an ANI parser (2007, 2 cores)
+  - impact at Microsoft: responsible for finding 1/3 of bugs in Windows 7, run 24/7 – in total more than 300 machine-years in 4 years
 
 ## SMT Learning
 
@@ -143,7 +160,7 @@ Meta:
 - **Citation:** Balunović, M. (2021). Learning to Solve SMT Formulas. Theoretical Foundations of SAT/SMT Solving, Simons Institute for the Theory of Computing.
 - **Link:** https://simons.berkeley.edu/talks/learning-solve-smt-formulas
 - **Inbound references:** (none)
-- **State:** skimmed
+- **State:** recognized
 
 Findings:
 

@@ -18,14 +18,14 @@
 
 - *concolic* = <u>con</u>crete + symb<u>olic</u> execution (in parallel)
 - concrete execution with real values guides symbolic execution for gathering constraints
-  - start with random inputs
+  - start with random or existing inputs (e.g., existing test files, plausible input data)
   - execute and record encountered constraints
   - negate last constraint that yields a new execution path
   - solve path constraint and try to generate new inputs
   - execute with new inputs
     - in case of non-deterministic program, assert that intended branch is reached (to deny **divergent execution**)
   - repeat recursively until no new constraints are found/computation limit is exceeded
-- different search strategies (DFS, BFS, bounded DFS)
+- different search strategies (DFS, BFS, bounded DFS (?), generational search)
 - depends on performant and powerful SMT solvers (NP-complete)
   - **SAT solver** (satisfiability): determines whether a equation system can be solved and provides a solution
   - **SMT solver** (satisfiability module („within“) theories): SAT solver for computer algebras with common data types
@@ -40,14 +40,16 @@
 
 ## Applications
 
+> potential of the tool
+
 - modeling:
   - construction of CFGs (control flow graphs)
 - program analysis:
-  - check invariants to find bugs, uncaught exception, memory corruption, or security vulnerabilities
-    - auto-fix bugs
+  - check invariants to find bugs such as uncaught exceptions, memory corruptions, missing robustness against system/hardware failures, or security vulnerabilities (e.g., multiple queries in call to DBMS)
+    - foundation for auto-fixing bugs
   - find dead code
   - generate invariants
-  - compare programs by execution trees
+  - compare programs by execution trees/asserting equality after executing both symbolically
 - test generation/reprocases for bugs
 - dynamic recompilation
 
@@ -126,7 +128,7 @@ Examples: syscalls, concurrency (multithreading, accelerators), frameworks (inve
 Solutions:
 
 - no isolation (pollutes environment, unwanted side effects)
-- emulation (complex models)
+- emulation (complex models), environment drivers for emulating state in generated tests
 - fork environment (performance overhead)
 - pass concrete values from concolic execution/EGT (may miss some execution paths through environment)
 - heuristic approaches: combine symbex with sub-callgraphs/fuzzing (see „Testing Android Apps“)
