@@ -85,6 +85,10 @@ express entire program as a single symbolic expression (unless DSE, which has on
 - significant optimization! for a simple loop, makes difference between hours and seconds.
 - similar to dynamic state merging, but that „still performs per-path execution, and only opportunistically merges“
 
+### Backward symbolic execution
+
+TODO
+
 ## Applications
 
 > potential of the tool
@@ -92,14 +96,18 @@ express entire program as a single symbolic expression (unless DSE, which has on
 - modeling:
   - construction of CFGs (control flow graphs)
 - program analysis:
-  - find bugs/security vulnerabilities (uncaught exceptions, memory corruptions, violated assertions)
+  - find bugs/security vulnerabilities (uncaught exceptions, memory corruptions, violated contracts/assertions)
     - foundation for auto-fixing bugs
+    - exploit generation (e.g., AEG)
   - find dead code
   - infer invariants
   - compare programs by behavior
-  - program exploration by input/output table
+    - contractual SemVer (e.g., CrossHair)
+- program exploration/reverse engineering
+  - generate input/output table (e.g., Pex/Intellitest)
+  - binary analysis through constraint injection-based debugging  (e.g., Ponce)
 - test generation/reproduction of (non-deterministic) bugs
-- dynamic recompilation (reverse engineering plus automated security patching/optimization)
+- dynamic recompilation (e.g., BinRec: reverse engineering plus automated security patching/optimization)
 
 ## Classification
 
@@ -116,7 +124,7 @@ express entire program as a single symbolic expression (unless DSE, which has on
 ## Tools
 
 - DART: Directed Automated Random Testing (C, first implementation?)
-  - concolic execution
+  - concolic execution or not symbolic at all?
 - CUTE: A Concolic Unit Testing Engine (C, jCUTE for Java)
   - concolic execution
   - DART + multithreading + dynamic data structures and pointers
@@ -154,6 +162,9 @@ express entire program as a single symbolic expression (unless DSE, which has on
 - MergePoint (x86 binaries)
   - veritesting
   - impact: checked all 33k debian binaries in 18 CPU-months revealed 11k bugs (Amazon EC2: \$0.28/bug)
+- Ponce (binaries)
+  - constraint injection-based debugging for exploration of binaries
+- CrossHair (Python)
 
 ==TODO: Make this a table with columns for target platform, implementation approach, and remarkable notes/impacts, if any==
 
@@ -198,7 +209,7 @@ Solutions:
 
 ### Memory modeling
 
-- e.g., arrays, memory aliases, arithmetic overflow, pointers/OOPs
+- symbolic reasoning of, e.g., arrays, memory aliases, arithmetic overflow, pointers/OOPs/function pointers
 
 - the problem with symbolic memory access (e.g., array element at symbolic index): only accurately solvable by concretizing symbolic address
 

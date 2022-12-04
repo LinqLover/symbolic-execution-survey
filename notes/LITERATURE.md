@@ -47,6 +47,40 @@ stateDiagram-v2
 
 ---
 
+## Awesome Symbolic Execution
+
+Meta:
+
+- **Link:** https://github.com/ksluckow/awesome-symbolic-execution
+- **State:** recognized
+
+Findings:
+
+- **Contributions:** collection of papers, lectures, and practical tools on symbex
+
+## BinRec
+
+Meta:
+
+- **Citation:** Altinay, A., Nash, J., Kroes, T., Rajasekaran, P., Zhou, D., Dabrowski, A., ... & Franz, M. (2020, April). BinRec: dynamic binary lifting and recompilation. In *Proceedings of the Fifteenth European Conference on Computer Systems* (pp. 1-16).
+- **Link:** <https://download.vusec.net/papers/binrec_eurosys20.pdf>
+- **State:** recognized
+
+Findings:
+
+- **Contributions:** usage of symbolic execution for dynamic recompilation
+
+## CrossHair Documentation
+
+Meta:
+
+- **Link:** <https://crosshair.readthedocs.io/en/latest/index.html>
+- **State:** recognized
+
+Findings:
+
+- **Contributions:** description of a symbex tool for Python; applications for live contract checking, test generation, and implementation diffing; concept of contractual SemVer
+
 ## CUTE
 
 Meta:
@@ -301,6 +335,20 @@ Meta:
 
 - **Link:** <https://arxiv.org/pdf/1610.00502.pdf>
 - **Summary:** <https://alastairreid.github.io/RelatedWork/papers/baldoni:compsurv:2018/>
+- **State:** unchecked
+
+## Symbex Tools Survey
+
+Meta:
+
+- **Citation:** Duraibi, S., Alashjaee, A. M., & Song, J. (2019). A Survey of Symbolic Execution Tools. *International Journal of Computer Science and Security (IJCSS)*, *13*(6), 244-255.
+- **Link:** http://www.cscjournals.org/manuscript/Journals/IJCSS/Volume13/Issue6/IJCSS-1519.pdf
+- **State:** unchecked
+
+Findings:
+
+- low-quality paper!
+- **Contributions:** brief overview of academic symbex tools
 
 ## Testing Android Apps
 

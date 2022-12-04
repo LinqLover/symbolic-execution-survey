@@ -34,6 +34,8 @@ Nodes are branch statements, edges are branches, labeled with executed statement
 
 Path in execution tree, represents equivalence class of inputs
 
+## Random Testing
+
 ## SMT solver, SAT solver
 
 Decide whether an equation system/formula can be solved and provide a concrete solution is possible. SAT = satisfiability; SMT = satisfiability modulo theory, also knows axioms for common data types
