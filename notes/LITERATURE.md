@@ -65,6 +65,18 @@ Meta:
 - **Inbound references:** Wikipedia Concolic, Software Testing
 - **State:** unchecked
 
+## Efficient State Merging
+
+Meta:
+
+- **Link:** <https://dslab.epfl.ch/pubs/stateMerging.pdf>
+
+## EGT
+
+Meta:
+
+- **Link:** <https://www.doc.ic.ac.uk/~cristic/papers/egt-spin-05.pdf>
+
 ## KLEE
 
 Meta:
@@ -102,6 +114,67 @@ Findings:
   - runtime: open-ended? for programs 2K – 10K ELOC, still not terminated after 1h
   - in comparison, random testing does not detect when everything is covered
 
+## Literature Overview
+
+Meta:
+
+- **Citation:** Reid, A. Related Work.
+- **Link:** <https://alastairreid.github.io/RelatedWork>
+- **State:** to be skimmed
+
+Findings:
+
+- **Contributions:** brief overview of related work on symbex
+
+## MergePoint
+
+- **Citation:** Avgerinos, T., Rebert, A., Cha, S. K., & Brumley, D. (2014, May). Enhancing symbolic execution with veritesting. In *Proceedings of the 36th International Conference on Software Engineering* (pp. 1083-1094).
+- **Link:** <https://users.ece.cmu.edu/~aavgerin/papers/veritesting-icse-2014.pdf>
+- **State:** absorbed
+
+Findings:
+
+- **Contributions:** static symbolic execution (SSE) through veritesting; evaluation of impact for selected binaries
+
+## Microsoft Intellitest
+
+Meta:
+
+- **Citation:** Hogenson, G., Warren, G., Sherer, T., et al. Microsoft Intellitest. In *Visual Studio (Windows). Microsoft Learn.* 2022.
+- **Link:** <https://learn.microsoft.com/en-us/visualstudio/test/intellitest-manual>
+- **Inbound references:** (none)
+- **State:** absorbed
+
+Findings:
+
+- **Contributions:** exhaustive documentation of Microsoft Intellitest tooling; brief summary of implementation and limitations
+
+## PEX
+
+Meta:
+
+- **Citation:** Tillmann, N., & Halleux, J. D. (2008, April). Pex–white box test generation for. net. In *International conference on tests and proofs* (pp. 134-153). Springer, Berlin, Heidelberg.
+- **Link:** <https://www.microsoft.com/en-us/research/wp-content/uploads/2008/04/fulltext.pdf>
+- **Inbound references:** (none)
+- **State:** to be skimmed
+
+Findings:
+
+- **Contributions:** description of PEX framework; case study
+
+## PEX to Code Digger
+
+Meta:
+
+- **Citation:** Tillmann, N., De Halleux, J., & Xie, T. (2014, September). Transferring an automated test generation tool to practice: From Pex to Fakes and Code Digger. In *Proceedings of the 29th ACM/IEEE international conference on Automated software engineering* (pp. 385-396).
+- **Link:** <https://dl.acm.org/doi/pdf/10.1145/2642937.2642941>
+- **Inbound references:** (none)
+- **State:** to be skimmed
+
+Findings:
+
+- **Contributions:** evolution of PEX to industry product; empirical observations; tool impact
+
 ## Practical SMT Solving
 
 Meta:
@@ -127,7 +200,7 @@ Findings:
 
 - **Contributions:** basic overview of symbolic execution and concolic testing, examples, some discussion, some applications
 
-## SAGE
+## SAGE Impact
 
 Meta:
 
@@ -151,7 +224,26 @@ Findings:
   - symbolic-expression caching, constraint simplification (e.g., for unrelated, redundant, or logically implied constraints)
 - evaluation:
   - performance: 8h for an ANI parser (2007, 2 cores)
-  - impact at Microsoft: responsible for finding 1/3 of bugs in Windows 7, run 24/7 – in total more than 300 machine-years in 4 years
+  - impact at Microsoft: responsible for finding 1/3 of bugs in Windows 7, run 24/7 – in total more than 300 machine-years in 4 years, currently on more than 200 machines each day
+
+## SAGE Implementation
+
+Meta:
+
+- **Citation:** Godefroid, P., Levin, M. Y., & Molnar, D. A. (2008, February). Automated whitebox fuzz testing. In *NDSS* (Vol. 8, pp. 151-166).
+- **Link:** <https://www.cs.purdue.edu/homes/xyzhang/fall07/Papers/fuzz.pdf>
+- **State:** unchecked
+
+## SFU Slides
+
+Meta:
+
+- **Link:** <https://www2.cs.sfu.ca/~wsumner/teaching/473/14-symbolic-execution.pdf>
+- **State:** recognized
+
+Findings:
+
+- **Contributions:** brief overview of symbex approach, implementations, challenges, applications, and some tools
 
 ## SMT Learning
 
@@ -178,6 +270,37 @@ Meta:
 Findings:
 
 - **Contributions:** in-depth overview of theory, approaches, and challenges; collection of implementations; references to surveys (TODO)
+
+## Software and Security Testing
+
+Meta:
+
+- **Citation:** Pham, T. (2022): Software and Security Testing. University of Melbourne.
+- **Link:** <https://swen90006.github.io/notes/Symbolic-Execution.html>
+- **State:** skimmed
+
+Findings:
+
+- **Contributions:** basic overview of symbex approach, implementations, challenges, applications, educational examples
+
+## Symbex
+
+Meta:
+
+- **Citation:** King, J. C. (1976). Symbolic execution and program testing. *Communications of the ACM*, *19*(7), 385-394.
+- **URL:** <https://dl.acm.org/doi/pdf/10.1145/360248.360252>
+- **State:** unchecked
+
+Findings:
+
+- **Contributions:** *the* original paper on symbex
+
+## Symbex Techniques Survey
+
+Meta:
+
+- **Link:** <https://arxiv.org/pdf/1610.00502.pdf>
+- **Summary:** <https://alastairreid.github.io/RelatedWork/papers/baldoni:compsurv:2018/>
 
 ## Testing Android Apps
 
