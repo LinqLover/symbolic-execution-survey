@@ -11,7 +11,7 @@
 ### Classical symbolic execution/pure symbolic execution
 
 - maintain **symbolic state** (map of variables to **symbolic expressions**) and **path condition**/**path constraint** formula
-- execute and refine path constraints/**fork** execution for them along **execution paths,** building an **execution tree**
+- execute and refine path constraints/**fork** execution for them along **execution paths,** building an **execution tree**/**control-flow graph (CFG)**
 - solve path constraint for each terminated path to provide concrete values
   - depends on performant and powerful SMT solvers (NP-complete)
     - **SAT solver** (satisfiability): determines whether a equation system can be solved and provides a solution
@@ -71,6 +71,7 @@ express entire program as a single symbolic expression (unless DSE, which has on
 
 - less overhead for branches, more complex constraint sets
 - strict SSE cannot deal with blackboxes and certain control flow patterns (why not?)
+- TODO: how exactly does it work? just an AST transformation?
 
 **veritesting:** mix DSE/concolic execution and SSE on program fragments for better performance
 
@@ -100,12 +101,15 @@ TODO
     - foundation for auto-fixing bugs
     - exploit generation (e.g., AEG)
   - find dead code
+  - formal verification/check invariants
   - infer invariants
   - compare programs by behavior
     - contractual SemVer (e.g., CrossHair)
 - program exploration/reverse engineering
   - generate input/output table (e.g., Pex/Intellitest)
-  - binary analysis through constraint injection-based debugging  (e.g., Ponce)
+  - debugging
+    - symbolic debugger 
+    - binary analysis through constraint injection-based debugging  (e.g., Ponce)
 - test generation/reproduction of (non-deterministic) bugs
 - dynamic recompilation (e.g., BinRec: reverse engineering plus automated security patching/optimization)
 
@@ -115,22 +119,25 @@ TODO
   - other than for classical dynamic analysis, no or no complete input data is required/symbex can find code paths itself
 - alternatives:
   - static analysis (for static patterns)
+    - no context available or harder to reconstruct
   - analyze and test code manually
+    - not automated
   - (non-whitebox) fuzzing
-    - less systematic: either worse performance (for *all* possible inputs) or worse coverage than symbex
+    - less systematic: either significantly worse performance (for *all* possible inputs) or worse coverage than symbex
       - if there are less inputs than program paths, full-coverage fuzzing is faster (seldom)
     - symbiosis: whitebox-fuzzing (see SAGE)
 
 ## Tools
 
 - DART: Directed Automated Random Testing (C, first implementation?)
-  - concolic execution or not symbolic at all?
+  - concolic execution
 - CUTE: A Concolic Unit Testing Engine (C, jCUTE for Java)
   - concolic execution
   - DART + multithreading + dynamic data structures and pointers
 - CREST (C, open platform)
 - EXE (C)
-  - bit-level accuracy (supports casts, including OS representations such as network packets, inodes, …)
+  - bit-level accurate memory model (supports casts, including OS representations such as network packets, inodes, …)
+  - sucessful for discovering bugs/vulnerabilities in different areas such as librabys, file systems, drivers, …
 - KLEE (C, open-source):
   - EGT
   - EXE for LLVM compiler
@@ -138,12 +145,13 @@ TODO
   - support for environment models (filesystem, …)
 - Microsoft SAGE (x86 binaries)
   - concolic execution: simulate handling of corrupt files (1 symbol per byte)
-- Microsoft Intellitest
-  - concolic (?) execution for C#/.NET Framework
-  - previous names: PEX, Smart Unit Tests
-  - based on Z3
+- PEX/Microsoft Intellitest
+  - PEX:
+    - concolic (?) execution for .NET Framework languages (C#, F#, VB), operates on bytecode/CIL (presumably?)
+    - based on Z3
   - Intellitest: tool in Microsoft Visual Studio (Enterprise) for test generation and exploration
-    - parametrized unit test (PUT) framework
+    - previous name: Smart Unit Tests
+    - parametrized unit testing (PUT) framework
       - specify assumptions (preconditions) and assertions (postconditions)
       - specify parametrized mocks
       - provides mocks for many .NET components
@@ -158,13 +166,14 @@ TODO
       - possibly distracts from actual business logic, need to ignore many exceptions, quality vs quantity
 - S2E: research platform for symbex of binaries
 - [PathCrawler](http://pathcrawler-online.com:8080/)
-- Java Symbolic PathFinder
+- Java Symbolic PathFinder (symbolic execution)
 - MergePoint (x86 binaries)
   - veritesting
   - impact: checked all 33k debian binaries in 18 CPU-months revealed 11k bugs (Amazon EC2: \$0.28/bug)
 - Ponce (binaries)
   - constraint injection-based debugging for exploration of binaries
 - CrossHair (Python)
+- further tools not checked: angr (binaries), 
 
 ==TODO: Make this a table with columns for target platform, implementation approach, and remarkable notes/impacts, if any==
 
@@ -186,7 +195,7 @@ Solutions:
 - trade-in precision/coverage for sake of runtime through (configurable) limits:
   - execution time, number of paths, loop iterations, callstack size
   - precision of symbolic representations
-  - selective symbolic execution (SSE): which parts of program to analyze symbolically
+  - **selective symbolic execution:** which parts of program to analyze symbolically
 - search strategies/branch prioritization
   - maximize statement/branch coverage:
     - favor paths closest to to any uncovered instruction from static CFG (obtained from static analysis)
@@ -237,6 +246,8 @@ Solutions:
 
 - controlling: choice of concretized values (for instance, by excluding `MAX_INT`, `nullptr`, etc.)
 
+- **generalized symbolic execution**/**lazy initialization** of pointers
+
 - TODO – how do solutions and sophisticated memory models look like?
 
 ### Blackbox environment/nondeterministic behavior/path divergence
@@ -248,7 +259,7 @@ Solutions:
 - pass concrete values from DSE to blackbox without isolation (pollutes environment, unwanted side effects, limited code coverage)
 - emulation (complex models): mocks/environment drivers for providing state in symbex and reproducing it in generated tests
 - fork environment (huge performance overhead)
-- heuristic approaches: combine symbex with sub-callgraphs/fuzzing (see „Testing Android Apps“)
+- heuristic approaches: combine symbex with sub-callgraphs/fuzzing (TODO) (see „Testing Android Apps“)
 
 ### Limitations of Constraint Solver
 

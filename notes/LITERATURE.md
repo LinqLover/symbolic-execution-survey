@@ -292,6 +292,19 @@ Findings:
 
 - **Contributions:** basic overview of SMT solving with ex advanced SMT techniques
 
+## Software Testing Preliminary
+
+Meta:
+
+- **Citation:** Cadar, C., Godefroid, P., Khurshid, S., Păsăreanu, C. S., Sen, K., Tillmann, N., & Visser, W. (2011, May). Symbolic execution for software testing in practice: preliminary assessment. In *Proceedings of the 33rd International Conference on Software Engineering* (pp. 1066-1071).
+- **Link:** <https://www.doc.ic.ac.uk/~cristic/papers/symex-icse-impact-11.pdf>
+- **Inbound references:** (none)
+- **State:** absorbed
+
+Findings:
+
+- **Contributions:** short overview of theory, some implementation strategies, and some implementations
+
 ## Software Testing
 
 Meta:
@@ -342,13 +355,37 @@ Meta:
 Meta:
 
 - **Citation:** Duraibi, S., Alashjaee, A. M., & Song, J. (2019). A Survey of Symbolic Execution Tools. *International Journal of Computer Science and Security (IJCSS)*, *13*(6), 244-255.
-- **Link:** http://www.cscjournals.org/manuscript/Journals/IJCSS/Volume13/Issue6/IJCSS-1519.pdf
-- **State:** unchecked
+- **Link:** <http://www.cscjournals.org/manuscript/Journals/IJCSS/Volume13/Issue6/IJCSS-1519.pdf>
+- **State:** discarded
 
 Findings:
 
 - low-quality paper!
 - **Contributions:** brief overview of academic symbex tools
+
+## Symbolic Execution Debugger
+
+Meta:
+
+- **Citation:** Hentschel, M., Bubel, R., & Hähnle, R. (2019). The Symbolic Execution Debugger (SED): a platform for interactive symbolic execution, debugging, verification and more. *International Journal on Software Tools for Technology Transfer*, *21*(5), 485-513.
+- **Link:** <https://www.researchgate.net/journal/International-Journal-on-Software-Tools-for-Technology-Transfer-1433-2787/publication/323544859_The_Symbolic_Execution_Debugger_SED_a_platform_for_interactive_symbolic_execution_debugging_verification_and_more/links/5fb9273a299bf104cf6710b3/The-Symbolic-Execution-Debugger-SED-a-platform-for-interactive-symbolic-execution-debugging-verification-and-more.pdf>
+- **State:** to be checked
+
+Findings:
+
+- **Contributions:** interactive symbolic executio
+
+## Symbolic Evaluation
+
+Meta:
+
+- **Citation:** Cheatham, T. E., Holloway, G. H., & Townley, J. A. (1979). Symbolic evaluation and the analysis of programs. *IEEE Transactions on Software Engineering*, (4), 402-417.
+- **Inbound references:** (none)
+- **State:** recognized
+
+Findings:
+
+- **Contributions:** concept related to static symbex
 
 ## Testing Android Apps
 
