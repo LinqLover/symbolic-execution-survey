@@ -373,7 +373,18 @@ Meta:
 
 Findings:
 
-- **Contributions:** interactive symbolic executio
+- **Contributions:** interactive symbolic execution
+
+## Symbolic Execution Timelines
+
+Meta:
+
+- **Link:** <https://github.com/enzet/symbolic-execution>
+- **State:** recognized
+
+Findings:
+
+- **Contributions:** overview, history, and organizational connections of symbolic execution engines and solvers
 
 ## Symbolic Evaluation
 

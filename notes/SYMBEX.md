@@ -2,11 +2,302 @@
 
 ## Introduction
 
+aka **symbex,** **SymEx**
+
 - > From one point of view, implementation code has a “grammar” of the legal inputs it accepts and acts on, or rejects. [Symbolic execution] extracts this grammar (and the concrete sentences it accepts and rejects) from the implementation rather than from a hand-written specification.
 
 - > [Symbolic execution] can be seen as a way to turn code “inside out” so that instead of consuming inputs [it] becomes a generator of them.
 
-## Approaches for symbolic execution/symbex/SymEx
+Formal specification:
+
+- Inputs:
+  - executable program (source code/bytecode/binary)
+  - optional configuration (time constraints, priority schemes, assumptions – see challenges below)
+  - optional environment models (drivers/mocks/stubs – see challenges below)
+- Outputs:
+  - option 1: set of alternative inputs for the program
+    - may contain function parameters, global variables, environment behavior
+    - should maximize the code coverage for the program and minimize the number of inputs
+    - optimal: should minimize complexity of inputs
+  - option 2: set of input constraints instead of concrete values
+  - option 3: results from executing a given function on each encountered program state
+
+## Classification
+
+- technique for dynamic analysis
+  - other than for classical dynamic analysis, no or no complete input data is required/symbex can find code paths itself
+- alternatives:
+  - static analysis (for static patterns)
+    - no context available or harder to reconstruct
+  - analyze and test code manually
+    - not automated
+  - (non-whitebox) fuzzing
+    - less systematic: either significantly worse performance (for *all* possible inputs) or worse coverage than symbex
+      - if there are less inputs than program paths, full-coverage fuzzing is faster (applies very seldom)
+    - symbiosis: whitebox-fuzzing (see SAGE)
+
+## Applications
+
+> potential of the tool
+
+- modeling:
+  - construction of CFGs (control flow graphs)
+- program analysis:
+  - find bugs/security vulnerabilities (uncaught exceptions, memory corruptions, violated contracts/assertions)
+    - foundation for auto-fixing bugs
+    - exploit generation (e.g., AEG)
+    - smart contract verification (e.g., Mythril)
+  - find dead code
+  - formal verification/check invariants
+  - infer invariants
+  - compare programs by behavior
+    - contractual SemVer (e.g., CrossHair)
+- program exploration/reverse engineering
+  - generate input/output table (e.g., Pex/Intellitest)
+  - disassemblers (e.g., medusa)
+  - debugging
+    - symbolic debugger 
+    - binary analysis through constraint injection-based debugging (e.g., Ponce)
+- test generation/reproduction of (non-deterministic) bugs
+- dynamic recompilation (e.g., BinRec: reverse engineering plus automated security patching/optimization)
+
+## Implementations
+
+### Execution Engines
+
+<table>
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Release Date</td>
+            <td>Languages/platforms</td>
+            <td>Implementation approach</td>
+            <td>Highlights</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>DART: Directed Automated RandomTesting</strong></td>
+            <td>2005</td>
+            <td>C</td>
+            <td>concolic execution</td>
+            <td>
+                <ul>
+                    <li>first implementation ever?</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>CUTE: A Concolic Unit Testing Engine</strong></td>
+            <td>2005</td>
+            <td>C</td>
+            <td>concolic execution</td>
+            <td>
+                <ul>
+                    <li>DART + multithreading + dynamic data structures and pointers</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>EXE</strong></td>
+            <td>2006</td>
+            <td>C</td>
+            <td>concolic execution</td>
+            <td>
+                <ul>
+                    <li>bit-level accurate memory model (supports casts, including OS representations such as network packets, inodes, …)</li>
+                    <li>successful for discovering bugs/vulnerabilities in different areas such as libraries, file systems, drivers, …</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>CREST</strong></td>
+            <td>2008</td>
+            <td>C</td>
+            <td>concolic execution</td>
+            <td>
+                <ul>
+                    <li>open platform?</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>KLEE</strong></td>
+            <td>2008</td>
+            <td>C</td>
+            <td>EGT</td>
+            <td>
+                <ul>
+                    <li>EXE for LLVM compiler (?)</li>
+                    <li>better memory performance</li>
+                    <li>support for environment models (filesystem, ...)</li>
+                    <li>impact: 90% code coverage for coreutils</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Microsoft SAGE</strong></td>
+            <td>2008</td>
+            <td>x86 binaries (and maybe others)</td>
+            <td>concolic execution</td>
+            <td>
+                <ul>
+                    <li>based on Z3 (SMT solver)</li>
+                    <li>simulate handling of corrupt files (degenerate symbolic bytes from test files)</li>
+                    <li>impact: responsible for finding 1/3 of bugs in Windows 7, standard component of Microsoft's internal testing pipelines, run daily 24/7 on more than 200 machines</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Microsoft PEX</strong></td>
+            <td>2008</td>
+            <td>.NET Framework (C#, F#, VB.NET)/CIL bytecode?</td>
+            <td>concolic execution (?)</td>
+            <td>
+                <ul>
+                    <li>based on Z3 (SMT solver)</li>
+                    <li>common limitations: nondeterminism, concurrency, native code, constraint solving, …</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>Java Symbolic PathFinder</strong></td>
+            <td>2010</td>
+            <td>Java</td>
+            <td>pure symbolic execution</td>
+            <td>
+                <ul>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong>MergePoint</strong></td>
+            <td>2014</td>
+            <td>x86 binaries</td>
+            <td>veritesting</td>
+            <td>
+                <ul>
+                    <li>impact: checked all 33k debian binaries in 18 CPU-months revealed 11k bugs (Amazon EC2: $0.28/bug)</li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+further populars tools not examined more closely: angr (binaries), jCUTE (Java), S2E (binaries), ...
+
+More engines and solvers: <https://github.com/enzet/symbolic-execution>
+
+### Tools
+
+<table>
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Release Date</td>
+            <td>Languages/platforms</td>
+            <td>Implementation</td>
+            <td>Highlights</td>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong><a href="https://github.com/wisk/medusa">medusa</a></strong></td>
+            <td>2011</td>
+            <td>Assembler</td>
+            <td></td>
+            <td>interactive disassembler</td>
+        </tr>
+        <tr>
+            <td><strong><a href="http://pathcrawler-online.com:8080/">PathCrawler</a></strong></td>
+            <td>2013</td>
+            <td>C</td>
+            <td></td>
+            <td>education/demo of operating principle, visualization of code coverage</td>
+        </tr>
+        <tr>
+            <td><strong><a href="https://docs.idaponce.com/examples/symbolic-engine">Ponce</a></strong></td>
+            <td>2013</td>
+            <td>Assembler</td>
+            <td></td>
+            <td>constraint-injection-based debugging for exploration of binaries</td>
+        </tr>
+        <tr>
+            <td><strong>Microsoft Intellitest</strong><br>(previously aka <strong>Smart Unit Tests</strong>)</td>
+            <td>2015</td>
+            <td>.NET Framework (C#, F#, VB.NET)</td>
+            <td>based on Microsoft PEX</td>
+            <td>
+                <ul>
+                    <li><strong>Parametrized Unit Testing (PUT)</strong> framework: specify <em>assumptions</em> (preconditions) and <em>assertions</em> (postconditions), create parametrized mocks, and use provided mocks for many .NET components</li>
+                    <li>
+                        <strong>test exploration:</strong>
+                        <ul>
+                            <li>pro: even without actual unit tests with assertions, exploration helps reveal forgotten code paths/exceptions</li>
+                            <li>can use assertions in the code base / still, without assertions, unexpected behavior may be missed</li>
+                            <li>
+                                con: symbex of even simple framework calls reveals large complexity – e.g., a <code>Console.WriteLine();</code> might throw several exceptions
+                                <ul>
+                                    <li>false positives due to blackbox implementation of <code>Console</code></li>
+                                    <li>possibly distracts from actual business logic, need to ignore many exceptions, quality vs quantity</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>symbolic types: automatic choice of possible concrete class for abstract types (abstract classes/interfaces)</li>
+                    <li>configuration options for exploration bounds, choice of mocks, …</li>
+                    <li>impact: part of Microsoft Visual Studio (Enterprise) since 2015</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong><a href="https://pypi.org/project/crosshair-tool/">CrossHair</a></strong></td>
+            <td>2017</td>
+            <td>Python</td>
+            <td></td>
+            <td>
+                <ul>
+                    <li>interactive contract checking</li>
+                    <li>test generation</li>
+                    <li>behavioral diffing/contractual SemVer</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><strong><a href="https://github.com/ConsenSys/mythril">mythril</a></strong></td>
+            <td>2017</td>
+            <td>Ethereum smart contracts (Solidity, Yul, Vyper, ...) for EVM</td>
+            <td></td>
+            <td>security analysis tool for EVM bytecode (smart contract checking)</td>
+        </tr>
+        <tr>
+            <td><strong><a href="https://github.com/microsoft/onefuzz">OneFuzz</a></strong></td>
+            <td>2020</td>
+            <td>binaries</td>
+            <td>based on Microsoft SAGE</td>
+            <td>automatic fuzzing tool with means for reproduction and debugging</td>
+        </tr>
+    </tbody>
+</table>
+
+## Impact
+
+- security testing
+  - SAGE at Microsoft: responsible for finding 1/3 of bugs in Windows 7, standard component of Microsoft's internal testing pipelines, run daily 24/7 on more than 200 machines
+    - each security bulletin costs multiple millions USD
+  - coreutils (89 binaries, 72 kLOC):
+    - KLEE (2008): 84.5% LCOV, 56 bugs/89 h
+    - zesti (2012): 8 bugs/22 h
+    - efficient state merging (2012): 89 h
+    - Mayhem (2012): 97.6% LCOV/25 h (for subset of 25 binaries)
+  - Debian (33k binaries):
+    - MergePoint (2014): 11k bugs/18 CPU-months (Amazon EC2: \$0.28/bug)
+- tooling
+  - testing and exploration: Intellitest in Visual Studio (used by millions of developers)
+  - bug checking: OneFuzz (2.6k stars on GitHub, used in >400 popular OS projects on GitHub), mythril (2.9k stars on GitHub, used in >50 popular OS projects on GitHub)
+  - disassembly: medusa (1k stars on GitHub), Ponce (1.3k stars on GitHub)
+
+## Implementation approaches
 
 ### Classical symbolic execution/pure symbolic execution
 
@@ -34,6 +325,7 @@ Motivation: improve performance, handle blackboxes
 - *concolic* = <u>con</u>crete + symb<u>olic</u> execution (simultaneously)
 
 - concrete execution with real values guides symbolic execution for gathering constraints
+
   - start with random or existing inputs (e.g., existing test files, plausible input data)
   - execute and record encountered constraints
   - negate last constraint that yields a new execution path
@@ -46,23 +338,27 @@ Motivation: improve performance, handle blackboxes
 - different search strategies (DFS, BFS, bounded DFS (?), generational search)
 
 - comparison with pure symbex:
+
   - for choosing next path, negate a single condition to alter concrete values
-  
+
   - for environment/blackbox calls: can always continue with concrete values (but maybe omit some paths in the environment/blackbox)
-  
+
   - for **unsolvable constraint sets:**
+
     - classical symbex needs to drop execution paths
+
       - (in theory, could also produce impossible execution paths)
-      
+
     - concolic can always continue with concrete values (but omit some paths)
-    
+
     - example:
-    
+
       ```c
       if (hash(x) == s) { ... }
       ```
-    
+
   - classic symbex needs its own executor and implement **forking,** concolic can **instrument** the program and reuse existing interpreter/compiler
+
     - environment calls from classic symbex execution forks might be out of order
 
 ### Static symbolic execution (SSE)
@@ -90,97 +386,6 @@ express entire program as a single symbolic expression (unless DSE, which has on
 
 TODO
 
-## Applications
-
-> potential of the tool
-
-- modeling:
-  - construction of CFGs (control flow graphs)
-- program analysis:
-  - find bugs/security vulnerabilities (uncaught exceptions, memory corruptions, violated contracts/assertions)
-    - foundation for auto-fixing bugs
-    - exploit generation (e.g., AEG)
-  - find dead code
-  - formal verification/check invariants
-  - infer invariants
-  - compare programs by behavior
-    - contractual SemVer (e.g., CrossHair)
-- program exploration/reverse engineering
-  - generate input/output table (e.g., Pex/Intellitest)
-  - debugging
-    - symbolic debugger 
-    - binary analysis through constraint injection-based debugging  (e.g., Ponce)
-- test generation/reproduction of (non-deterministic) bugs
-- dynamic recompilation (e.g., BinRec: reverse engineering plus automated security patching/optimization)
-
-## Classification
-
-- technique for dynamic analysis
-  - other than for classical dynamic analysis, no or no complete input data is required/symbex can find code paths itself
-- alternatives:
-  - static analysis (for static patterns)
-    - no context available or harder to reconstruct
-  - analyze and test code manually
-    - not automated
-  - (non-whitebox) fuzzing
-    - less systematic: either significantly worse performance (for *all* possible inputs) or worse coverage than symbex
-      - if there are less inputs than program paths, full-coverage fuzzing is faster (seldom)
-    - symbiosis: whitebox-fuzzing (see SAGE)
-
-## Tools
-
-- DART: Directed Automated Random Testing (C, first implementation?)
-  - concolic execution
-- CUTE: A Concolic Unit Testing Engine (C, jCUTE for Java)
-  - concolic execution
-  - DART + multithreading + dynamic data structures and pointers
-- CREST (C, open platform)
-- EXE (C)
-  - bit-level accurate memory model (supports casts, including OS representations such as network packets, inodes, …)
-  - sucessful for discovering bugs/vulnerabilities in different areas such as librabys, file systems, drivers, …
-- KLEE (C, open-source):
-  - EGT
-  - EXE for LLVM compiler
-  - better memory performance
-  - support for environment models (filesystem, …)
-- Microsoft SAGE (x86 binaries)
-  - concolic execution: simulate handling of corrupt files (1 symbol per byte)
-- PEX/Microsoft Intellitest
-  - PEX:
-    - concolic (?) execution for .NET Framework languages (C#, F#, VB), operates on bytecode/CIL (presumably?)
-    - based on Z3
-  - Intellitest: tool in Microsoft Visual Studio (Enterprise) for test generation and exploration
-    - previous name: Smart Unit Tests
-    - parametrized unit testing (PUT) framework
-      - specify assumptions (preconditions) and assertions (postconditions)
-      - specify parametrized mocks
-      - provides mocks for many .NET components
-    - symbolic types: automatic choice of possible concrete class for abstract types (abstract classes/interfaces)
-    - settings for exploration bounds, choice of mocks, …
-  - limitations: nondeterminism, concurrency, native code, constraint solving, …
-  - practical consequences:
-    - pro: even without actual unit tests with assertions, exploration helps reveal forgotten code paths/exceptions
-    - can use assertions in the code base / still, without assertions, unexpected behavior may be missed
-    - con: symbex of even simple framework calls reveals large complexity – e.g., a `Console.WriteLine();` might throw several exceptions
-      - false positives due to blackbox implementation of `Console`
-      - possibly distracts from actual business logic, need to ignore many exceptions, quality vs quantity
-- S2E: research platform for symbex of binaries
-- [PathCrawler](http://pathcrawler-online.com:8080/)
-- Java Symbolic PathFinder (symbolic execution)
-- MergePoint (x86 binaries)
-  - veritesting
-  - impact: checked all 33k debian binaries in 18 CPU-months revealed 11k bugs (Amazon EC2: \$0.28/bug)
-- Ponce (binaries)
-  - constraint injection-based debugging for exploration of binaries
-- CrossHair (Python)
-- further tools not checked: angr (binaries), 
-
-==TODO: Make this a table with columns for target platform, implementation approach, and remarkable notes/impacts, if any==
-
-## Case Studies
-
-
-
 ## Challenges
 
 ### Path explosion
@@ -196,6 +401,7 @@ Solutions:
   - execution time, number of paths, loop iterations, callstack size
   - precision of symbolic representations
   - **selective symbolic execution:** which parts of program to analyze symbolically
+  - **directed symbolic execution:** find parts of program close to unit of interest
 - search strategies/branch prioritization
   - maximize statement/branch coverage:
     - favor paths closest to to any uncovered instruction from static CFG (obtained from static analysis)
