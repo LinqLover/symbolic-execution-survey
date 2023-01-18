@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd "${SCRIPT_DIR}"
+
+if [ -f .env ]; then
+	source .env
+fi
+CODE="${CODE:-"code"}"
+VS="${VS:-"devenv.exe"}"
+ECLIPSE="${ECLIPSE:-"eclipse"}"
+
+cd ..
+"$CODE" demos &
+"$VS" "$(wslpath -w "$(cd demos/intellitest && realpath "$(cat see)")/IntelliTestDemo.sln")" &
+"$ECLIPSE" -import "$(wslpath -w "$(cd demos/sed && realpath "$(cat see)")")" &

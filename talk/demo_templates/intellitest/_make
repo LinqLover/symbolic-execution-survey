@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+set -e
+
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+cd "${SCRIPT_DIR}"
+DEMO_DIR="${DEMO_DIR:-"${PWD//demo_templates\//demos\/}"}/"
+
+rm -rf "${DEMO_DIR}"
+mkdir -p "${DEMO_DIR}"
+
+EXAMPLE_DIR=../../../examples/intellitest
+
+echo "${EXAMPLE_DIR}" > "${DEMO_DIR}/see"
