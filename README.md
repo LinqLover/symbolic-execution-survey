@@ -7,6 +7,7 @@ Created in the [research seminar on Advanced Programming Tools](https://hpi.de/e
 
 Prepare a **presentation/lecture (1 h) followed by a discussion (30 min)** and a **written report (8 – 12 pages).** See all details in [INSTRUCTIONS.md](INSTRUCTIONS.md).
 
-## Notes
+## Materials
 
-All findings from the literature research can be found in [notes/](./notes/).
+- **[Notes:](./notes)** All findings from the literature research.
+- **[Examples:](./examples)** Some examples of different tools and applications for symbolic execution.
