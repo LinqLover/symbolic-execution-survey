@@ -1,0 +1,52 @@
+Script started on 2023-01-17 18:53:37+0100
+[0m[1m[34m$ [0mclang -emit-llvm -c foo.c
+[1mfoo.c:20:5: [0m[0;1;35mwarning: [0m[1mimplicit declaration of function 'klee_make_symbolic' is invalid in C99 [-Wimplicit-function-declaration][0m
+    klee_make_symbolic(&a, sizeof(a), "a");
+[0;1;32m    ^
+[0m1 warning generated.
+[0m[1m[34m$ [0mklee foo.bc
+KLEE: output directory is "/mnt/c/Users/Christoph/Documents/repos/symbolic-execution-survey/talk/demos/klee/klee-out-0"
+[0mKLEE: Using Z3 solver backend
+[0m[0;1;31mKLEE: ERROR: (location information missing) abort failure
+[0m[0;1;37mKLEE: NOTE: now ignoring this error at this location
+[0m[0;1;32m
+KLEE: done: total instructions = 96
+KLEE: done: completed paths = 4
+KLEE: done: partially completed paths = 1
+KLEE: done: generated tests = 5
+[0m[0m[1m[34m$ [0mls klee-last
+[0m[01;32massembly.ll[0m  [01;32mmessages.txt[0m  [01;32mrun.stats[0m         [01;32mtest000002.ktest[0m      [01;32mtest000003.kquery[0m  [01;32mtest000004.ktest[0m  [01;32mwarnings.txt[0m
+[01;32minfo[0m         [01;32mrun.istats[0m    [01;32mtest000001.ktest[0m  [01;32mtest000003.abort.err[0m  [01;32mtest000003.ktest[0m   [01;32mtest000005.ktest[0m
+[0m[1m[34m$ [0mcat klee-last/test000003.abort.err
+Error: abort failure
+Stack:
+	#000000065 in foo(symbolic, symbolic, symbolic)
+	#100000088 in main()
+[0m[1m[34m$ [0mktest-tool klee-last/test000003.ktest
+ktest file : 'klee-last/test000003.ktest'
+args       : ['foo.bc']
+num objects: 3
+object 0: name: 'a'
+object 0: size: 4
+object 0: data: b'\x00\x00\x00\x00'
+object 0: hex : 0x00000000
+object 0: int : 0
+object 0: uint: 0
+object 0: text: ....
+object 1: name: 'b'
+object 1: size: 4
+object 1: data: b'\x00\x00\x00\x80'
+object 1: hex : 0x00000080
+object 1: int : -2147483648
+object 1: uint: 2147483648
+object 1: text: ....
+object 2: name: 'c'
+object 2: size: 4
+object 2: data: b'\x01\x01\x01\x01'
+object 2: hex : 0x01010101
+object 2: int : 16843009
+object 2: uint: 16843009
+object 2: text: ....
+[0m[1m[34m$ [0mexit
+
+Script done on 2023-01-17 18:54:46+0100
