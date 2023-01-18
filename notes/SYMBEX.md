@@ -40,8 +40,6 @@ Formal specification:
 
 > potential of the tool
 
-- modeling:
-  - construction of CFGs (control flow graphs)
 - program analysis:
   - find bugs/security vulnerabilities (uncaught exceptions, memory corruptions, violated contracts/assertions)
     - foundation for auto-fixing bugs
@@ -52,13 +50,16 @@ Formal specification:
   - infer invariants
   - compare programs by behavior
     - contractual SemVer (e.g., CrossHair)
-- program exploration/reverse engineering
-  - generate input/output table (e.g., Pex/Intellitest)
+- reverse engineering
+  - generate input/output table (e.g., Pex/IntelliTest)
+  - construction of CFGs (control flow graphs)
   - disassemblers (e.g., medusa)
-  - debugging
-    - symbolic debugger 
-    - binary analysis through constraint injection-based debugging (e.g., Ponce)
-- test generation/reproduction of (non-deterministic) bugs
+  - symbolic execution debugging (e.g., SED, Ponce)
+- testing
+  - crash test generation/reproduction of (non-deterministic) bugs
+    - no assertions
+  - testing frameworks (e.g., Pex/IntelliTest, DeepState)
+  - (minimum set of inputs is not always ideal: especially for well-maintainable fixtures, a larger set of inputs could be more intuitive, self-documenting, and coverage-robust against changes in the implementation)
 - dynamic recompilation (e.g., BinRec: reverse engineering plus automated security patching/optimization)
 
 ## Implementations
@@ -242,6 +243,7 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
                                     <li>possibly distracts from actual business logic, need to ignore many exceptions, quality vs quantity</li>
                                 </ul>
                             </li>
+                            <li>con: even for exploration, need to specify factories</li>
                         </ul>
                     </li>
                     <li>symbolic types: automatic choice of possible concrete class for abstract types (abstract classes/interfaces)</li>
@@ -280,12 +282,13 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
     </tbody>
 </table>
 
+
 ## Impact
 
 - security testing
   - SAGE at Microsoft: responsible for finding 1/3 of bugs in Windows 7, standard component of Microsoft's internal testing pipelines, run daily 24/7 on more than 200 machines
     - each security bulletin costs multiple millions USD
-  - coreutils (89 binaries, 72 kLOC):
+  - coreutils (89 binaries, 72 kLOC, originally 67.6% LCOV):
     - KLEE (2008): 84.5% LCOV, 56 bugs/89 h
     - zesti (2012): 8 bugs/22 h
     - efficient state merging (2012): 89 h
@@ -293,8 +296,11 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
   - Debian (33k binaries):
     - MergePoint (2014): 11k bugs/18 CPU-months (Amazon EC2: \$0.28/bug)
 - tooling
-  - testing and exploration: Intellitest in Visual Studio (used by millions of developers)
-  - bug checking: OneFuzz (2.6k stars on GitHub, used in >400 popular OS projects on GitHub), mythril (2.9k stars on GitHub, used in >50 popular OS projects on GitHub)
+  - testing and exploration:
+    - IntelliTest in Visual Studio (used by millions of developers)
+    - CrossHair (>800 stars on GitHub)
+    - DeepState (>700 stars on GitHub)
+  - bug checking: angr, Manticore, Miasm, Triton, …
   - disassembly: medusa (1k stars on GitHub), Ponce (1.3k stars on GitHub)
 
 ## Implementation approaches
@@ -306,7 +312,7 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
 - solve path constraint for each terminated path to provide concrete values
   - depends on performant and powerful SMT solvers (NP-complete)
     - **SAT solver** (satisfiability): determines whether a equation system can be solved and provides a solution
-    - **SMT solver** (satisfiability module („within“) theories): SAT solver for computer algebras with common data types
+    - **SMT solver** (satisfiability modulo („within“) theories): SAT solver for computer algebras with common data types
 
 ### Dynamic symbolic execution (DSE)
 
@@ -403,17 +409,19 @@ Solutions:
   - **selective symbolic execution:** which parts of program to analyze symbolically
   - **directed symbolic execution:** find parts of program close to unit of interest
 - search strategies/branch prioritization
-  - maximize statement/branch coverage:
-    - favor paths closest to to any uncovered instruction from static CFG (obtained from static analysis)
-    - favor statements that were run in symbex less often so far
-  - randomization (?)
+  - **depth-first search (DFS):** intuitive/simple implementation, not loop-safe
+  - **breadth-first search (BFS):** too many context switches, memory overhead
+  - **random search:** not always loop-safe
+  - **generational search** (SAGE): negate each constraint from current branch separately, smaller memory overhead
+  - heuristics:
+    - order branches by code coverage increase
+    - CFG-based branch order (CarFast)
+      - favor paths closest to to any uncovered instruction from static CFG (obtained from static analysis)
+    - evolutionary search of test input space (genetic programming)
+      - fitness based on results of static/dynamic analysis
+      - TODO
   - random testing (test conditions for random inputs?)
-  - evolutionary search of test input space (genetic programming)
-    - fitness based on results of static/dynamic analysis
-    - TODO
   - mutation testing: prioritize random values based on mutation coverage
-    - TODO
-  - BFS/DFS
     - TODO
 - caches:
   - cache results (pre- and post-conditions) per function

@@ -268,6 +268,10 @@ Meta:
 - **Link:** <https://www.cs.purdue.edu/homes/xyzhang/fall07/Papers/fuzz.pdf>
 - **State:** unchecked
 
+## Search Strategies
+
+- **Citation:** Liu, Y., Zhou, X., & Gong, W. W. (2017). A survey of search strategies in the dynamic symbolic execution. In *ITM Web of Conferences* (Vol. 12, p. 03025). EDP Sciences.
+
 ## SFU Slides
 
 Meta:
