@@ -1,7 +1,7 @@
 from typing import Optional
 
 class Node:
-    def __init__(self, value, left=None, right=None):
+    def __init__(self, value: int, left: Optional['Node']=None, right: Optional['Node']=None):
         self.value = value
         self.left = left
         self.right = right
