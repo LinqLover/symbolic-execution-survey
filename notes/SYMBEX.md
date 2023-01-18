@@ -223,7 +223,7 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
             <td>constraint-injection-based debugging for exploration of binaries</td>
         </tr>
         <tr>
-            <td><strong>Microsoft Intellitest</strong><br>(previously aka <strong>Smart Unit Tests</strong>)</td>
+            <td><strong>Microsoft IntelliTest</strong><br>(previously aka <strong>Smart Unit Tests</strong>)</td>
             <td>2015</td>
             <td>.NET Framework (C#, F#, VB.NET)</td>
             <td>based on Microsoft PEX</td>

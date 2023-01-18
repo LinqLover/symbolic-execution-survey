@@ -170,7 +170,7 @@ Findings:
 
 - **Contributions:** static symbolic execution (SSE) through veritesting; evaluation of impact for selected binaries
 
-## Microsoft Intellitest
+## Microsoft IntelliTest
 
 Meta:
 
@@ -181,7 +181,7 @@ Meta:
 
 Findings:
 
-- **Contributions:** exhaustive documentation of Microsoft Intellitest tooling; brief summary of implementation and limitations
+- **Contributions:** exhaustive documentation of Microsoft IntelliTest tooling; brief summary of implementation and limitations
 
 ## PEX
 
