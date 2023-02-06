@@ -25,7 +25,7 @@ Formal specification:
 ## Classification
 
 - technique for dynamic analysis
-  - other than for classical dynamic analysis, no or no complete input data is required/symbex can find code paths itself
+  - other than for traditional dynamic analysis, no or no complete input data is required/symbex can find code paths itself
 - alternatives:
   - static analysis (for static patterns)
     - no context available or harder to reconstruct
@@ -305,7 +305,7 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
 
 ## Implementation approaches
 
-### Classical symbolic execution/pure symbolic execution
+### Traditional symbolic execution/pure symbolic execution
 
 - maintain **symbolic state** (map of variables to **symbolic expressions**) and **path condition**/**path constraint** formula
 - execute and refine path constraints/**fork** execution for them along **execution paths,** building an **execution tree**/**control-flow graph (CFG)**
@@ -351,7 +351,7 @@ Motivation: improve performance, handle blackboxes
 
   - for **unsolvable constraint sets:**
 
-    - classical symbex needs to drop execution paths
+    - traditional symbex needs to drop execution paths
 
       - (in theory, could also produce impossible execution paths)
 
@@ -363,9 +363,9 @@ Motivation: improve performance, handle blackboxes
       if (hash(x) == s) { ... }
       ```
 
-  - classic symbex needs its own executor and implement **forking,** concolic can **instrument** the program and reuse existing interpreter/compiler
+  - traditional symbex needs its own executor and implement **forking,** concolic can **instrument** the program and reuse existing interpreter/compiler
 
-    - environment calls from classic symbex execution forks might be out of order
+    - environment calls from traditional symbex execution forks might be out of order
 
 ### Static symbolic execution (SSE)
 
