@@ -1,6 +1,6 @@
 # Talk
 
-## Learning goals
+## Learning Goals
 
 After this class, students should:
 
@@ -14,6 +14,6 @@ After this class, students should:
 - have heard of some research directions that are currently pursued in symbolic execution
   - TODO: research further - e.g., scale out, more search heuristic, smt solver performance?
 
-## Main question
+## Main Question
 
 What is symbolic execution and what is it (not) useful for?

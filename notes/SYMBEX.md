@@ -360,9 +360,9 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
   - S2E (>200 stars on GitHub): binary analysis platform
 - disassembly: medusa (>1k stars on GitHub), Ponce (>1.3k stars on GitHub)
 
-## Implementation approaches
+## Implementation Approaches
 
-### Traditional symbolic execution/pure symbolic execution
+### Traditional Symbolic Execution/Pure Symbolic Execution
 
 - maintain **symbolic state** (map of variables to **symbolic expressions**) and **path condition**/**path constraint** formula
 - execute and refine path constraints/**fork** execution for them along **execution paths,** building an **execution tree**/**control-flow graph (CFG)**
@@ -371,19 +371,19 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
     - **SAT solver** (satisfiability): determines whether a equation system can be solved and provides a solution
     - **SMT solver** (satisfiability modulo („within“) theories): SAT solver for computer algebras with common data types
 
-### Dynamic symbolic execution (DSE)
+### Dynamic Symbolic Execution (DSE)
 
 mix concrete and symbolic execution
 
 Motivation: improve performance, handle blackboxes
 
-#### Execution-generated Testing (EGT)/online DSE
+#### Execution-generated Testing (EGT)/Online DSE
 
 - concrete + symbolic execution (interleaving)
 - guided by symbolic execution, operations without symbolic arguments are executed concretely
 - for environment/blackbox calls: generate concrete values on demand using SMT solver
 
-#### Concolic testing/offline DSE
+#### Concolic Testing/Offline DSE
 
 - *concolic* = <u>con</u>crete + symb<u>olic</u> execution (simultaneously)
 
@@ -424,7 +424,7 @@ Motivation: improve performance, handle blackboxes
 
     - environment calls from traditional symbex execution forks might be out of order
 
-### Static symbolic execution (SSE)
+### Static Symbolic Execution (SSE)
 
 express entire program as a single symbolic expression (unless DSE, which has one constraint set per branch)
 
@@ -432,7 +432,7 @@ express entire program as a single symbolic expression (unless DSE, which has on
 - strict SSE cannot deal with blackboxes and certain control flow patterns (why not?)
 - TODO: how exactly does it work? just an AST transformation?
 
-**veritesting:** mix DSE/concolic execution and SSE on program fragments for better performance
+**Veritesting:** mix DSE/concolic execution and SSE on program fragments for better performance
 
 - often, complex queries can be solved more performant than branch overhead can be handled
 - dynamic choosing between SSE and DSE
@@ -445,13 +445,13 @@ express entire program as a single symbolic expression (unless DSE, which has on
 - significant optimization! for a simple loop, makes difference between hours and seconds.
 - similar to dynamic state merging, but that „still performs per-path execution, and only opportunistically merges“
 
-### Backward symbolic execution
+### Backward Symbolic Execution
 
 TODO
 
 ## Challenges
 
-### Path explosion
+### Path Explosion
 
 aka **state explosion** („state“ = program path)
 
@@ -487,7 +487,7 @@ Solutions:
   - TODO
 - parallelization (split up search space, run on multiple CPUs/nodes)
 
-### Memory modeling
+### Memory Modeling
 
 - symbolic reasoning of, e.g., arrays, memory aliases, arithmetic overflow, pointers/OOPs/function pointers
 
@@ -521,7 +521,7 @@ Solutions:
 
 - TODO – how do solutions and sophisticated memory models look like?
 
-### Blackbox environment/nondeterministic behavior/path divergence
+### Blackbox Environment/Nondeterministic Behavior/Path Divergence
 
 Examples: syscalls, concurrency (multithreading, accelerators), frameworks (inversion of control)
 
