@@ -47,6 +47,12 @@ stateDiagram-v2
 
 ---
 
+## angr
+
+Meta:
+
+- **Link:** <https://ieeexplore.ieee.org/abstract/document/7546500>
+
 ## Awesome Symbolic Execution
 
 Meta:
@@ -111,6 +117,12 @@ Meta:
 
 - **Link:** <https://www.doc.ic.ac.uk/~cristic/papers/egt-spin-05.pdf>
 
+## jCute
+
+Meta:
+
+- **Link:** <https://link.springer.com/chapter/10.1007/978-3-540-70889-6_13>
+
 ## KLEE
 
 Meta:
@@ -159,6 +171,12 @@ Meta:
 Findings:
 
 - **Contributions:** brief overview of related work on symbex
+
+## Mayhem
+
+Meta:
+
+- **Link:** <https://ieeexplore.ieee.org/abstract/document/6234425>
 
 ## MergePoint
 
@@ -233,6 +251,12 @@ Meta:
 Findings:
 
 - **Contributions:** basic overview of symbolic execution and concolic testing, examples, some discussion, some applications
+
+## S2E
+
+Meta:
+
+- **Link:** <https://dl.acm.org/doi/abs/10.1145/1961296.1950396>
 
 ## SAGE Impact
 

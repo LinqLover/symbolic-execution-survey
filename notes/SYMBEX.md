@@ -64,6 +64,8 @@ Formal specification:
 
 ## Implementations
 
+(selections)
+
 ### Execution Engines
 
 <table>
@@ -110,6 +112,13 @@ Formal specification:
                     <li>successful for discovering bugs/vulnerabilities in different areas such as libraries, file systems, drivers, …</li>
                 </ul>
             </td>
+        </tr>
+        <tr>
+            <td><strong>jCUTE</strong></td>
+            <td>2006</td>
+            <td>Java</td>
+            <td>concolic execution</td>
+            <td></td>
         </tr>
         <tr>
             <td><strong>CREST</strong></td>
@@ -172,6 +181,20 @@ Formal specification:
             </td>
         </tr>
         <tr>
+            <td><strong>S2E</strong></td>
+            <td>2011</td>
+            <td>x86 binaries</td>
+            <td>online symbolic execution</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td><strong>Mayhem</strong></td>
+            <td>2012</td>
+            <td>x86 binaries</td>
+            <td>hybrid symbolic execution (alternating online + concolic)</td>
+            <td></td>
+        </tr>
+        <tr>
             <td><strong>MergePoint</strong></td>
             <td>2014</td>
             <td>x86 binaries</td>
@@ -182,10 +205,15 @@ Formal specification:
                 </ul>
             </td>
         </tr>
+        <tr>
+            <td><strong>angr</strong></td>
+            <td>2016</td>
+            <td>binaries</td>
+            <td>concolic execution</td>
+            <td></td>
+        </tr>
     </tbody>
 </table>
-
-further populars tools not examined more closely: angr (binaries), jCUTE (Java), S2E (binaries), ...
 
 More engines and solvers: <https://github.com/enzet/symbolic-execution>
 
@@ -273,6 +301,20 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
             <td>security analysis tool for EVM bytecode (smart contract checking)</td>
         </tr>
         <tr>
+            <td><strong><a href="https://github.com/trailofbits/deepstate">DeepState</a></strong></td>
+            <td>2018</td>
+            <td>C/C++</td>
+            <td></td>
+            <td>parametrized unit testing framework</td>
+        </tr>
+        <tr>
+            <td><strong><a href="https://www.key-project.org/applications/debugging/">Symbolic Execution Debugger</a></strong></td>
+            <td>2019</td>
+            <td>Java</td>
+            <td></td>
+            <td>interactive exploration of symbolic execution tree</td>
+        </tr>
+        <tr>
             <td><strong><a href="https://github.com/microsoft/onefuzz">OneFuzz</a></strong></td>
             <td>2020</td>
             <td>binaries</td>
@@ -282,26 +324,41 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
     </tbody>
 </table>
 
-
 ## Impact
 
-- security testing
-  - SAGE at Microsoft: responsible for finding 1/3 of bugs in Windows 7, standard component of Microsoft's internal testing pipelines, run daily 24/7 on more than 200 machines
-    - each security bulletin costs multiple millions USD
-  - coreutils (89 binaries, 72 kLOC, originally 67.6% LCOV):
-    - KLEE (2008): 84.5% LCOV, 56 bugs/89 h
-    - zesti (2012): 8 bugs/22 h
-    - efficient state merging (2012): 89 h
-    - Mayhem (2012): 97.6% LCOV/25 h (for subset of 25 binaries)
-  - Debian (33k binaries):
-    - MergePoint (2014): 11k bugs/18 CPU-months (Amazon EC2: \$0.28/bug)
-- tooling
-  - testing and exploration:
-    - IntelliTest in Visual Studio (used by millions of developers)
-    - CrossHair (>800 stars on GitHub)
-    - DeepState (>700 stars on GitHub)
-  - bug checking: angr, Manticore, Miasm, Triton, …
-  - disassembly: medusa (1k stars on GitHub), Ponce (1.3k stars on GitHub)
+### Security Testing
+
+- SAGE at Microsoft: responsible for finding 1/3 of bugs in Windows 7, standard component of Microsoft's internal testing pipelines, run daily 24/7 on more than 200 machines
+  - each security bulletin costs multiple millions USD
+- coreutils (89 binaries, 72 kLOC, originally 67.6% LCOV):
+  - KLEE (2008): 84.5% LCOV, 56 bugs/89 h
+  - zesti (2012): 8 bugs/22 h
+  - efficient state merging (2012): 89 h
+  - Mayhem (2012): 97.6% LCOV/25 h (for subset of 25 binaries)
+- Debian (33k binaries):
+  - MergePoint (2014): 11k bugs/18 CPU-months (Amazon EC2: \$0.28/bug)
+
+### Tooling
+
+- testing and exploration:
+  - IntelliTest in Visual Studio (used by millions of developers)
+  - CrossHair (>800 stars on GitHub)
+  - DeepState (>700 stars on GitHub)
+- program analysis platforms
+  - angr (>6.3k stars on GitHub): binary analyis platform with Python API; symbolic execution; disassembly & decompilation
+  - Manticore (>3.3k stars on GitHub): symbolic analysis of smart contracts and binaries with Python API
+  - Miasm (>3k stars on GitHub): binary analysis, modification, and generation
+  - mythril (>2.9k stars on GitHub): security analysis tool for EVM bytecode (smart contract checking)
+  - Triton (>2.7k stars on GitHub): dynamic binary analysis library
+  - OneFuzz (>2.6k stars on GitHub): automatic fuzzing tool with means for reproduction and debugging
+  - Binary Analysis Platform (BAP) (>1.8k stars on GitHub)
+  - SymCC (>600 stars on GitHub): symbolic execution compiler wrapper for C/C++; test generation
+  - Maat (>500 stars on GitHub): binary analysis framework; environment simulation
+  - Alive2 (>400 stars on GitHub): verification of LLVM optimizations
+  - Jalangi2 (>300 stars on GitHub): dynamic analysis framework for JavaScript; suspicious bug pattern detection (propagation of `NaN`s an `undefined`s, …); memory profiler; JIT-unfriendly code snippet detection
+  - FuzzBALL (>200 stars on GitHub): binary symbolic execution engine
+  - S2E (>200 stars on GitHub): binary analysis platform
+- disassembly: medusa (>1k stars on GitHub), Ponce (>1.3k stars on GitHub)
 
 ## Implementation approaches
 
