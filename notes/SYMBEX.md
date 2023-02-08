@@ -532,6 +532,7 @@ Solutions:
   - **selective symbolic execution:** user-specified parts of program to analyze symbolically
     - **preconditioned symbolic execution:** user-specified preconditions (i.e., buffer sizes, known bytes, grammars for inputs)
     - reduces completeness
+      - use static analysis results to observable side effects from skipped units (**chopped symbolic execution**)
   - **directed/shortest-distance symbolic execution:** find parts of program close to unit of interest
   - **under-constrained symbolic execution** of individual functions: false positives for never-met constraints
   - **lazy test generation:** top-down analysis by (initially) treating function calls as blackbox/unknown symbol
@@ -675,3 +676,4 @@ Value concretization: prefer simple and human-readable values (e.g., `1` over `4
   - type flow information and statically generated value dependencies (e.g., TypeScript) for additional constraints and choice of memory model
   - program slicing, taint analysis, fuzzing, …
 - **separation logic** for „checking memory safety property“ in unmanaged code (?)
+- unsupervised learning/tuning of symbex engine parameters (SymTuner)

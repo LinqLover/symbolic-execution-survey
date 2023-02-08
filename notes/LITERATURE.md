@@ -47,6 +47,17 @@ stateDiagram-v2
 
 ---
 
+## Advances in Symbolic Execution
+
+Meta:
+
+- **Link:** <https://www.sciencedirect.com/science/article/abs/pii/S0065245818300627>
+- **State:** recognized
+
+Findings:
+
+- **Contributions:** trends on symbex implementation approaches and test generation; list of symbex engines
+
 ## angr
 
 Meta:
@@ -75,6 +86,12 @@ Meta:
 Findings:
 
 - **Contributions:** usage of symbolic execution for dynamic recompilation
+
+## Chopped Symbolic Execution
+
+Meta:
+
+- **Link:** <https://ieeexplore.ieee.org/document/9794116>
 
 ## CrossHair Documentation
 
@@ -294,6 +311,16 @@ Meta:
 
 - **Citation:** Liu, Y., Zhou, X., & Gong, W. W. (2017). A survey of search strategies in the dynamic symbolic execution. In *ITM Web of Conferences* (Vol. 12, p. 03025). EDP Sciences.
 
+## Search Strategies DSE
+
+Meta:
+
+- **Link:** <https://www.sciencedirect.com/science/article/abs/pii/S0920548919300066?via%3Dihub>
+
+Findings:
+
+- **Contributions:** comprehensive survey of search strategies; classification; evaluation
+
 ## SFU Slides
 
 Meta:
@@ -427,6 +454,13 @@ Meta:
 Findings:
 
 - **Contributions:** concept related to static symbex
+
+## SymTuner
+
+Meta:
+
+- **URL:** <https://ieeexplore.ieee.org/document/9794116>
+- **State:** recognized
 
 ## Testing Android Apps
 
