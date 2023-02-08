@@ -156,8 +156,6 @@ Findings:
   - rerun each generated test to assure it fails
 - evaluation:
   - 90% code coverage for coreutils
-    - TODO: why is coverage limited? seldom paths not yet reached due to time-outs? edge case not contained in models?
-  - runtime: open-ended? for programs 2K – 10K ELOC, still not terminated after 1h
   - in comparison, random testing does not detect when everything is covered
 
 ## Literature Overview
@@ -376,7 +374,11 @@ Meta:
 
 - **Link:** <https://arxiv.org/pdf/1610.00502.pdf>
 - **Summary:** <https://alastairreid.github.io/RelatedWork/papers/baldoni:compsurv:2018/>
-- **State:** unchecked
+- **State:** absorbed
+
+Findings:
+
+- **Contributions:** detailed overview of implementation approaches, challenges, and their solution; overview of some applications in the online appendix
 
 ## Symbex Tools Survey
 
@@ -448,7 +450,7 @@ Learnings:
     - repeat until code coverage threshold is reached
 - Implementational remarks
   - could not use reflection in stubs (not supported by JPF) -> reimplement stubs
-  - could not use regular hash maps for symbex (path explosion?) -> reimplment hash map
+  - could not use regular hash maps for symbex (path explosion?) -> reimplement hash map
 
 ## Wikipedia Concolic
 

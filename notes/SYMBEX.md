@@ -33,7 +33,7 @@ Formal specification:
     - not automated
   - (non-whitebox) fuzzing
     - less systematic: either significantly worse performance (for *all* possible inputs) or worse coverage than symbex
-      - if there are less inputs than program paths, full-coverage fuzzing is faster (applies very seldom)
+      - if there are fewer inputs than program paths, full-coverage fuzzing is faster (applies very seldom)
     - symbiosis: whitebox-fuzzing (see SAGE)
 
 ## Applications
@@ -83,18 +83,14 @@ Formal specification:
             <td><strong>DART: Directed Automated RandomTesting</strong></td>
             <td>2005</td>
             <td>C</td>
-            <td>concolic execution</td>
-            <td>
-                <ul>
-                    <li>first implementation ever?</li>
-                </ul>
-            </td>
+            <td>concolic execution, DFS, address concretization</td>
+            <td></td>
         </tr>
         <tr>
             <td><strong>CUTE: A Concolic Unit Testing Engine</strong></td>
             <td>2005</td>
             <td>C</td>
-            <td>concolic execution</td>
+            <td>concolic execution, address concretization</td>
             <td>
                 <ul>
                     <li>DART + multithreading + dynamic data structures and pointers</li>
@@ -125,20 +121,16 @@ Formal specification:
             <td>2008</td>
             <td>C</td>
             <td>concolic execution</td>
-            <td>
-                <ul>
-                    <li>open platform?</li>
-                </ul>
-            </td>
+            <td></td>
         </tr>
         <tr>
             <td><strong>KLEE</strong></td>
             <td>2008</td>
-            <td>C</td>
-            <td>EGT</td>
+            <td>LLVM (C, ...)</td>
+            <td>EGT, online symbolic execution</td>
             <td>
                 <ul>
-                    <li>EXE for LLVM compiler (?)</li>
+                    <li>cover environment by using x86-to-LLVM lifter</li>
                     <li>better memory performance</li>
                     <li>support for environment models (filesystem, ...)</li>
                     <li>impact: 90% code coverage for coreutils</li>
@@ -149,7 +141,7 @@ Formal specification:
             <td><strong>Microsoft SAGE</strong></td>
             <td>2008</td>
             <td>x86 binaries (and maybe others)</td>
-            <td>concolic execution</td>
+            <td>concolic execution, generational search</td>
             <td>
                 <ul>
                     <li>based on Z3 (SMT solver)</li>
@@ -162,7 +154,7 @@ Formal specification:
             <td><strong>Microsoft PEX</strong></td>
             <td>2008</td>
             <td>.NET Framework (C#, F#, VB.NET)/CIL bytecode?</td>
-            <td>concolic execution (?)</td>
+            <td>concolic execution</td>
             <td>
                 <ul>
                     <li>based on Z3 (SMT solver)</li>
@@ -181,17 +173,17 @@ Formal specification:
             </td>
         </tr>
         <tr>
-            <td><strong>S2E</strong></td>
+            <td><strong>S²E</strong></td>
             <td>2011</td>
             <td>x86 binaries</td>
-            <td>online symbolic execution</td>
+            <td>online symbolic execution, selective symbolic execution, virtualized environment</td>
             <td></td>
         </tr>
         <tr>
             <td><strong>Mayhem</strong></td>
             <td>2012</td>
             <td>x86 binaries</td>
-            <td>hybrid symbolic execution (alternating online + concolic)</td>
+            <td>hybrid symbolic execution, partial memory model</td>
             <td></td>
         </tr>
         <tr>
@@ -214,6 +206,8 @@ Formal specification:
         </tr>
     </tbody>
 </table>
+
+
 
 More engines and solvers: <https://github.com/enzet/symbolic-execution>
 
@@ -362,14 +356,63 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
 
 ## Implementation Approaches
 
-### Traditional Symbolic Execution/Pure Symbolic Execution
+### Basics
 
-- maintain **symbolic state** (map of variables to **symbolic expressions**) and **path condition**/**path constraint** formula
-- execute and refine path constraints/**fork** execution for them along **execution paths,** building an **execution tree**/**control-flow graph (CFG)**
-- solve path constraint for each terminated path to provide concrete values
-  - depends on performant and powerful SMT solvers (NP-complete)
-    - **SAT solver** (satisfiability): determines whether a equation system can be solved and provides a solution
-    - **SMT solver** (satisfiability modulo („within“) theories): SAT solver for computer algebras with common data types
+**Symbolic execution:**
+
+- execute a program with **symbolic variables** instead of concrete inputs
+- all accesses to symbolic variables create **symbolic expressions**
+- during execution, maintain a **symbolic state:**
+  - **symbolic store**/**symbolic memory** (map of variables to symbolic expressions)
+  - **path condition**/**path constraint** formula (set of Boolean expressions over symbolic variables)
+- use **branch conditions** that depend on a symbolic expression to uncover **execution tree:**
+  - paths: all discovered **execution paths** through the program (represent equivalences class of inputs)
+  - states: branch conditions at symbolic states
+  - edges: new constraints for different results of parent symbolic branch condition
+- to provide input values for different paths, solve path constraints for each terminated path
+
+**SMT solver:**
+
+- find possible results and solve path constraints (NP-complete)
+
+- **SAT solver** (satisfiability): decides whether a equation system can be solved and provides concrete solutions if possible
+
+- **SMT solver** (satisfiability modulo („within“) theories): SAT solver for computer algebras with common data types
+  - domain-specific theories (arithmetic, integer overflows, bitvectors, strings, …)
+  - popular implementations: Z3 (de-facto industry standard), STP
+  
+- <details>
+  <summary>Implementation (beta)</summary>
+
+  - Applies transformations (**tactics**) to simplify/normalize formula
+    - examples: constant folding ($x + 0 \to x$), normalize bounds ($k \leq x \to 0 \leq x - k$), bit blasting (split up variable into bits)
+  - Evaluate heuristics (**predicates** on formula expression) to select tactics
+    - handcrafted or learned
+  - Algorithms:
+
+    - **DPLL algorithm** for solving boolean expressions in CNF
+      - backtracking – divide and conquer over set of variables
+      - identify and solve **unit clauses** that only contain single unknown literal (solvable in in constant time), backtrack if mismatch
+    </details>
+
+### Offline vs Online Execution
+
+#### Offline/Traditional/Pure Symbolic Execution
+
+- when encountering a symbolic branch condition, **fork** execution for all possible results into different execution paths
+- efficient cloning of symbolic state through **copy-on-write** (shared symbolic stores for forks)
+- different search strategies for prioritizing execution paths (see [Challenges](#path-explosion))
+
+#### Online Symbolic Execution
+
+- instead of forking, execute one symbolic state at a time
+- when a path is completed, start again from the beginning of the program
+- pros: smaller memory footprint, no state isolation between forks required
+- con: repeated work for each path
+
+#### Hybrid Symbolic Execution
+
+online until memory bounds hit, then checkpoints for new branches, resume from them later online
 
 ### Dynamic Symbolic Execution (DSE)
 
@@ -377,19 +420,20 @@ mix concrete and symbolic execution
 
 Motivation: improve performance, handle blackboxes
 
-#### Execution-generated Testing (EGT)/Online DSE
+#### Execution-generated Testing (EGT) (online)
 
 - concrete + symbolic execution (interleaving)
 - guided by symbolic execution, operations without symbolic arguments are executed concretely
 - for environment/blackbox calls: generate concrete values on demand using SMT solver
 
-#### Concolic Testing/Offline DSE
+#### Concolic Testing (offline)
 
 - *concolic* = <u>con</u>crete + symb<u>olic</u> execution (simultaneously)
 
 - concrete execution with real values guides symbolic execution for gathering constraints
 
-  - start with random or existing inputs (e.g., existing test files, plausible input data)
+  - start with random or existing input seed(s) (e.g., existing test files, plausible input data)
+    - aka **„whitebox fuzzing“**
   - execute and record encountered constraints
   - negate last constraint that yields a new execution path
   - solve path constraint and try to generate new inputs
@@ -397,8 +441,6 @@ Motivation: improve performance, handle blackboxes
     - in case of non-deterministic program, assert that intended branch is reached (to deny **divergent execution**)
     - if supported by the executor, the execution can also be **forked**
   - repeat recursively until no new constraints are found/computation limit is exceeded
-
-- different search strategies (DFS, BFS, bounded DFS (?), generational search)
 
 - comparison with pure symbex:
 
@@ -424,13 +466,14 @@ Motivation: improve performance, handle blackboxes
 
     - environment calls from traditional symbex execution forks might be out of order
 
+
 ### Static Symbolic Execution (SSE)
 
-express entire program as a single symbolic expression (unless DSE, which has one constraint set per branch)
+express entire program as a single symbolic expression (unlike DSE, which has one constraint set per branch)
 
+- AST transformation using **function summaries** and **loop summaries**
 - less overhead for branches, more complex constraint sets
-- strict SSE cannot deal with blackboxes and certain control flow patterns (why not?)
-- TODO: how exactly does it work? just an AST transformation?
+- strict SSE cannot deal with blackboxes and complex control flow patterns
 
 **Veritesting:** mix DSE/concolic execution and SSE on program fragments for better performance
 
@@ -440,97 +483,157 @@ express entire program as a single symbolic expression (unless DSE, which has on
 - implementation
   - start in DSE mode
   - on branch hit: recover CFG from path constraints, find *transition points* (before next SSE limitations, unknown/blackbox instructions, or function boundaries)
-  - run SSE on reduced (acyclic) CFG: convert it into one large expression on the program state and solve that?
+  - run SSE on reduced (acyclic) CFG: convert it into one large expression on the program state and solve that
   - pass back control to DSE with the constraints and expressions developed for each transition point
 - significant optimization! for a simple loop, makes difference between hours and seconds.
 - similar to dynamic state merging, but that „still performs per-path execution, and only opportunistically merges“
 
-### Backward Symbolic Execution
+### Backward Symbolic Execution (BSE)
 
-TODO
+used for reverse debugging
+
+- **call-chain backward symbolic execution:** explore possible callers of function
+  - uses static CFG between functions
+  - path explosion!
 
 ## Challenges
 
 ### Path Explosion
 
-aka **state explosion** („state“ = program path)
+aka **state (space) explosion** („state“ = program path)
 
-Large or possibly even infinite number of paths (loops/recursion with symbolic break condition)
+Large or possibly infinite number of paths (loops/recursion with symbolic break condition)
 
 Solutions:
-- reduce number of paths through path merging/veritesting
+- reduce number of paths through **path summarization/pruning/merging**
+  - **function summaries:** create conditional symbolic expressions
+    - uses **compositional analysis:** analyze units separately and store pre- and postconditions
+  - **loop summaries**
+    - compact templates for loop bodies
+    - prove loop invariants
+    - challenges: multi-path loops, irregular side effects, …
+  - cache summaries for later
+  - **path pruning/subsumption** of similar paths
+    - ignore differences in return values/side effects that are never read
+    - remember error locations with constraints and do not retry in another branch
+  - **postconditioned symbolic execution:** incremental construction of weakest postconditions for program locations by backtracking complete paths (?)
+    - efficiency depends on path selection strategy (requires complete paths)
+    - uses **interpolation** (?)
+  - abstractions that summarize memory and constraints
+  - **path merging:** conditional constraints, conditional expressions in symbolic memory
+    - heuristics for choosing similar paths worth merging
+      - also may predict solver costs
+      - consider static CFG
+    - veritesting
   - (increased SMT complexity, but usually worth)
 - trade-in precision/coverage for sake of runtime through (configurable) limits:
   - execution time, number of paths, loop iterations, callstack size
   - precision of symbolic representations
-  - **selective symbolic execution:** which parts of program to analyze symbolically
-  - **directed symbolic execution:** find parts of program close to unit of interest
-- search strategies/branch prioritization
+  - **selective symbolic execution:** user-specified parts of program to analyze symbolically
+    - **preconditioned symbolic execution:** user-specified preconditions (i.e., buffer sizes, known bytes, grammars for inputs)
+    - reduces completeness
+  - **directed/shortest-distance symbolic execution:** find parts of program close to unit of interest
+  - **under-constrained symbolic execution** of individual functions: false positives for never-met constraints
+  - **lazy test generation:** top-down analysis by (initially) treating function calls as blackbox/unknown symbol
+  - **shadow symbolic execution:** in CI context, exploit differences of older program version and symbex results for that
+- search strategies/branch prioritization/path selection
   - **depth-first search (DFS):** intuitive/simple implementation, not loop-safe
   - **breadth-first search (BFS):** too many context switches, memory overhead
   - **random search:** not always loop-safe
   - **generational search** (SAGE): negate each constraint from current branch separately, smaller memory overhead
   - heuristics:
-    - order branches by code coverage increase
-    - CFG-based branch order (CarFast)
+    - weight/order branches by number of visits or code coverage/mutation coverage increase
+      - distance to nearest uncovered instruction, recency of previous coverage, …
+    - **subpath-guided-**/CFG-based branch order (CarFast)
       - favor paths closest to to any uncovered instruction from static CFG (obtained from static analysis)
-    - evolutionary search of test input space (genetic programming)
+    - **evolutionary search** of test input space (genetic programming)
       - fitness based on results of static/dynamic analysis
-      - TODO
-  - random testing (test conditions for random inputs?)
-  - mutation testing: prioritize random values based on mutation coverage
-    - TODO
+    - **buggy-path first strategy:** prioritize branches which contained more (non-critical) bugs, assumes heterogenous code quality in code base
+    - prioritize certain instruction types/control flow patterns such as loops, symbolic addresses, … that are likely to contain errors
+    - fitness functions, e.g. difference between variables that should be equal for a condition
+  - random testing (test conditions for random inputs)
 - caches:
   - cache results (pre- and post-conditions) per function
   - discard execution at paths that were already reached with same constraints
-- lazy test generation: top-down analysis by (initially) treating function calls as blackbox/unknown symbol?
-  - TODO
 - parallelization (split up search space, run on multiple CPUs/nodes)
 
 ### Memory Modeling
 
-- symbolic reasoning of, e.g., arrays, memory aliases, arithmetic overflow, pointers/OOPs/function pointers
+problem: symbolic reasoning of, e.g., arrays, memory aliases, arithmetic overflow, pointers/OOPs/function pointers with symbolic memory access (e.g., symbolic pointer, symbolic array index, symbolic object class)
 
-- the problem with symbolic memory access (e.g., array element at symbolic index): only accurately solvable by concretizing symbolic address
+- example:
 
-  - for concolic execution, concrete value may be used, but some branches may be omitted
+  ```c
+  void divergent(int x, int y)
+  {
+  	int s[4];
+  	s[0] = x;
+  	s[1] = 0;
+  	s[2] = 1;
+  	s[3] = 2;
+  	if (s[x] = s[y] + 2) {
+  		abort(); //error
+  	}
+  }
+  ```
 
-  - example:
+approaches:
 
-    ```c
-    void divergent(int x, int y)
-    {
-    	int s[4];
-    	s[0] = x;
-    	s[1] = 0;
-    	s[2] = 1;
-    	s[3] = 2;
-    	if (s[x] = s[y] + 2) {
-    		abort(); //error
-    	}
-    }
-    ```
+- **fully symbolic memory:** complete, but possible path explosion/memory overhead
+
+  - **state forking:** fork for all possible states
+    - possible path explosion!
+  - conditional expressions in symbolic store (comparably with online symbex)
+    - possible memory overhead
+  - symbolic addresses as keys in symbolic store
+
+  - **heap modeling** of pointers: pointers can only point to known (previously allocated) objects
+
+- **address concretization:** limited completeness, but reasonable performance
+
+  - heuristics: null pointer or new allocations, repeated recursively for fields in referenced data structure
+    - possible path explosion: upper bounds/priorities
+  - optional **lazy initialization** of fields on read (**generalized symbolic execution**)
+  - optional user-provided preconditions/assertions
+
+- **partial** memory model: only concretize some addresses
+
+  - read vs write addresses (read addresses are easier for symbolic memory)
+  - size of estimated possible space (needs to be small for symbolic memory)
+  - estimation: test random concretizations with solver (expensive), incomplete, further heuristics
+
+- concolic execution: do not invert symbolic pointers, but possibly omit some branches
+
+trade-off based on analysis goals (low-level vs high-level)
 
 - increased model complexity -> increased computation complexity
-
-- trade-off based on analysis goals (low-level vs high-level)
-
 - controlling: choice of concretized values (for instance, by excluding `MAX_INT`, `nullptr`, etc.)
 
-- **generalized symbolic execution**/**lazy initialization** of pointers
-
-- TODO – how do solutions and sophisticated memory models look like?
-
-### Blackbox Environment/Nondeterministic Behavior/Path Divergence
+### Blackbox Environment/Nondeterministic Behavior
 
 Examples: syscalls, concurrency (multithreading, accelerators), frameworks (inversion of control)
 
+**path divergence:** nondeterministic behavior leads to choice of different branch than expected when negating constraints for concolic execution
+
+- rates of >60%
+
 Solutions:
 
-- pass concrete values from DSE to blackbox without isolation (pollutes environment, unwanted side effects, limited code coverage)
-- emulation (complex models): mocks/environment drivers for providing state in symbex and reproducing it in generated tests
-- fork environment (huge performance overhead)
-- heuristic approaches: combine symbex with sub-callgraphs/fuzzing (TODO) (see „Testing Android Apps“)
+- pass **concrete values** to blackbox without isolation (pollutes environment, unwanted/untracked side effects, limited code coverage)
+  - concretized value using solver
+  - random value
+- **emulation** (complex models): mocks/environment drivers for providing state in symbex and reproducing it in generated tests
+  - return independent symbols: even detect attacks from infected environment, faster to build, but possibly too sensitive
+- **include environment** in symbex
+  - alternative strategies:
+    - **virtualize environment** (and fork emulator)
+    - **translate** it to symbex engine-compatible representation
+  - memory/performance overhead! full implementation contains more aspects than required for covering application.
+- heuristic approaches:
+  - **sub-callgraphs** and **regular input grammars** (see „Testing Android Apps“)
+  - fuzzing
+  - program slicing
+  - model generation
 
 ### Limitations of Constraint Solver
 
@@ -540,9 +643,35 @@ Not efficiently solvable constraint sets (missing theory knowledge / efficient a
 
 Solutions:
 
-- imprecision (approximated solutions, may miss some execution paths)
+- combination of different **theories** that are faster for parts of constraint set
+- **imprecision**
+  - approximated solutions
+  - random values
+  - may miss some execution paths
 - optimizations for brute-forcing
-  - eliminate irrelevant constraints: if only some constraints change (concolic execution), reuse all parts of the previous solution that the changed constraints do not depend on
-  - incremental solving: cache and reuse solutions for similar constraint sets (subsets: trivial, supersets: reduce number of unknown variables)
+  - **constraint reduction:**
+    - simplification/expression rewriting
+    - partition independent constraint sets
+    - eliminate irrelevant constraints: if only some constraints change (concolic execution), reuse all parts of the previous solution that the changed constraints do not depend on
+  - **reuse solutions:** cache and reuse solutions for similar constraint sets (subsets: trivial, supersets: reduce number of unknown variables)
+- **lazy constraints:** defer expensive constraint sets and compute them at path completion (probably easier then as more constraints are given)
+  - overhead in number of paths, but reduces pressure on SMT solver (useful if solver timeout is chosen well)
 
 Value concretization: prefer simple and human-readable values (e.g., `1` over `4328902461` or `abc` over `°╚Ã`)
+
+### Trends
+
+- SMT solvers
+  - faster SAT algorithms and theories
+  - constraint caching strategies
+  - domain-specific solver theories
+- branch prioritization
+  - advanced heuristics
+  - **probabilistic symbolic execution:** user-specified or mined branch weights
+    - also used to predict reliability and performance of application
+- concurrency models
+- exploitation of static analysis
+  - static control-flow graph (CFG) for branch prioritization and path merging
+  - type flow information and statically generated value dependencies (e.g., TypeScript) for additional constraints and choice of memory model
+  - program slicing, taint analysis, fuzzing, …
+- **separation logic** for „checking memory safety property“ in unmanaged code (?)
