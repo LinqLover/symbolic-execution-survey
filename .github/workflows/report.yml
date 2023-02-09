@@ -1,0 +1,32 @@
+name: Build Report
+
+on:
+  push:
+    paths:
+      - report/**
+      - .github/workflows/report.yml
+  workflow_dispatch:
+
+jobs:
+  latex:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd report
+          make tex
+      - uses: xu-cheng/latex-action@v2
+        with:
+          root_file: report.tex
+          working_directory: report
+      - uses: actions/upload-artifact@master
+        with:
+          name: report.pdf
+          path: report/report.pdf
+      - run: mkdir -p build & mv report/report.pdf report/
+      - uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/px23'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          keep_files: true
