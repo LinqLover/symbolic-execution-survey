@@ -393,7 +393,7 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
     - **DPLL algorithm** for solving boolean expressions in CNF
       - backtracking – divide and conquer over set of variables
       - identify and solve **unit clauses** that only contain single unknown literal (solvable in in constant time), backtrack if mismatch
-    </details>
+  </details>
 
 ### Offline vs Online Execution
 
@@ -439,7 +439,6 @@ Motivation: improve performance, handle blackboxes
   - solve path constraint and try to generate new inputs
   - schedule execution of program with new inputs
     - in case of non-deterministic program, assert that intended branch is reached (to deny **divergent execution**)
-    - if supported by the executor, the execution can also be **forked**
   - repeat recursively until no new constraints are found/computation limit is exceeded
 
 - comparison with pure symbex:
@@ -505,6 +504,22 @@ aka **state (space) explosion** („state“ = program path)
 Large or possibly infinite number of paths (loops/recursion with symbolic break condition)
 
 Solutions:
+- search strategies/branch prioritization/path selection
+  - **depth-first search (DFS):** intuitive/simple implementation, not loop-safe
+  - **breadth-first search (BFS):** too many context switches, memory overhead
+  - **random search:** not always loop-safe
+  - **generational search** (SAGE): negate each constraint from current branch separately, smaller memory overhead
+  - heuristics:
+    - weight/order branches by number of visits or code coverage/mutation coverage increase
+      - distance to nearest uncovered instruction, recency of previous coverage, …
+    - **subpath-guided-**/CFG-based branch order (CarFast)
+      - favor paths closest to to any uncovered instruction from static CFG (obtained from static analysis)
+    - **evolutionary search** of test input space (genetic programming)
+      - fitness based on results of static/dynamic analysis
+    - **buggy-path first strategy:** prioritize branches which contained more (non-critical) bugs, assumes heterogenous code quality in code base
+    - prioritize certain instruction types/control flow patterns such as loops, symbolic addresses, … that are likely to contain errors
+    - fitness functions, e.g. difference between variables that should be equal for a condition
+  - random testing (test conditions for random inputs)
 - reduce number of paths through **path summarization/pruning/merging**
   - **function summaries:** create conditional symbolic expressions
     - uses **compositional analysis:** analyze units separately and store pre- and postconditions
@@ -537,25 +552,6 @@ Solutions:
   - **under-constrained symbolic execution** of individual functions: false positives for never-met constraints
   - **lazy test generation:** top-down analysis by (initially) treating function calls as blackbox/unknown symbol
   - **shadow symbolic execution:** in CI context, exploit differences of older program version and symbex results for that
-- search strategies/branch prioritization/path selection
-  - **depth-first search (DFS):** intuitive/simple implementation, not loop-safe
-  - **breadth-first search (BFS):** too many context switches, memory overhead
-  - **random search:** not always loop-safe
-  - **generational search** (SAGE): negate each constraint from current branch separately, smaller memory overhead
-  - heuristics:
-    - weight/order branches by number of visits or code coverage/mutation coverage increase
-      - distance to nearest uncovered instruction, recency of previous coverage, …
-    - **subpath-guided-**/CFG-based branch order (CarFast)
-      - favor paths closest to to any uncovered instruction from static CFG (obtained from static analysis)
-    - **evolutionary search** of test input space (genetic programming)
-      - fitness based on results of static/dynamic analysis
-    - **buggy-path first strategy:** prioritize branches which contained more (non-critical) bugs, assumes heterogenous code quality in code base
-    - prioritize certain instruction types/control flow patterns such as loops, symbolic addresses, … that are likely to contain errors
-    - fitness functions, e.g. difference between variables that should be equal for a condition
-  - random testing (test conditions for random inputs)
-- caches:
-  - cache results (pre- and post-conditions) per function
-  - discard execution at paths that were already reached with same constraints
 - parallelization (split up search space, run on multiple CPUs/nodes)
 
 ### Memory Modeling
