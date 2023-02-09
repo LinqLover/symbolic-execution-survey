@@ -27,7 +27,7 @@ jobs:
           path: report/report.pdf
       - run: mkdir -p build & mv report/report.pdf build/
       - uses: peaceiris/actions-gh-pages@v3
-        if: github.ref == 'refs/heads/px23'
+        if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
