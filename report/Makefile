@@ -25,3 +25,7 @@ full-pdf : tex .output-folder
 	biber $(OUTPUT_FOLDER)/$(REPORT_FILE)
 	$(PDFLATEX) $(REPORT_FILE).tex
 	$(PDFLATEX) $(REPORT_FILE).tex
+
+clean :
+	rm -rf $(REPORT_FILE).tex
+	rm -rf $(OUTPUT_FOLDER)
