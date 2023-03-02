@@ -393,17 +393,17 @@ More engines and solvers: <https://github.com/enzet/symbolic-execution>
     - **DPLL algorithm** for solving boolean expressions in CNF
       - backtracking – divide and conquer over set of variables
       - identify and solve **unit clauses** that only contain single unknown literal (solvable in in constant time), backtrack if mismatch
-  </details>
+    </details>
 
-### Offline vs Online Execution
+### Online vs Offline Execution
 
-#### Offline/Traditional/Pure Symbolic Execution
+#### Online/Traditional/Pure Symbolic Execution
 
 - when encountering a symbolic branch condition, **fork** execution for all possible results into different execution paths
 - efficient cloning of symbolic state through **copy-on-write** (shared symbolic stores for forks)
 - different search strategies for prioritizing execution paths (see [Challenges](#path-explosion))
 
-#### Online Symbolic Execution
+#### Offline Symbolic Execution
 
 - instead of forking, execute one symbolic state at a time
 - when a path is completed, start again from the beginning of the program
@@ -476,7 +476,7 @@ express entire program as a single symbolic expression (unlike DSE, which has on
 
 **Veritesting:** mix DSE/concolic execution and SSE on program fragments for better performance
 
-- often, complex queries can be solved more performant than branch overhead can be handled
+- often, complex queries can be solved more performantly than branch overhead can be handled
 - dynamic choosing between SSE and DSE
   - fall back to DSE for limitations of SSE (see above)
 - implementation

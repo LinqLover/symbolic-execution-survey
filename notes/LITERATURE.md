@@ -91,7 +91,7 @@ Findings:
 
 Meta:
 
-- **Link:** <https://ieeexplore.ieee.org/document/9794116>
+- **Link:** <https://ieeexplore.ieee.org/document/8453093>
 
 ## CrossHair Documentation
 
@@ -306,6 +306,10 @@ Meta:
 - **Citation:** Godefroid, P., Levin, M. Y., & Molnar, D. A. (2008, February). Automated whitebox fuzz testing. In *NDSS* (Vol. 8, pp. 151-166).
 - **Link:** <https://www.cs.purdue.edu/homes/xyzhang/fall07/Papers/fuzz.pdf>
 - **State:** unchecked
+
+Findings:
+
+- **Contributions:** …, generational search, …
 
 ## Search Strategies
 
