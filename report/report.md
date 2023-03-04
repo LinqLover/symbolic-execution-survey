@@ -255,6 +255,41 @@ Like symbolic testing tools, symbolic reverse engineering tools suffer from the 
 
 # Impact
 
+In this section, we review the adoption of symbolic execution and its impact on particular software systems.
+
+## Adoption of Symbolic Execution Tools
+
+As an example, we evaluate the adoption of symbolic execution tools in the open source community by considering a selected sample of repositories on GitHub that use symbolic execution concepts, are actively maintained, and have an above-average popularity (at least 200 stars).
+The largest group of symbolic execution tools based on this criteria are frameworks and libraries that enable programmers to perform a dynamic analysis of their systems on a low or medium abstraction level.
+For instance, many tools offer APIs for running particular instructions or methods symbolically and inspecting the resulting execution tree [@shoshitaishvili2016sok; @desclaux2012miasm; @saudel2015triton].
+A large number of tools provides means for semi-automated vulnerability detection and exploit generation [@mythril; @onefuzz].
+Most tools operate on binaries; however, some solutions target applications for Java, JavaScript, or smart contracts that are run in the Ethereum VM [@mossberg2019manticore; @mythril].
+Some tools also use symbolic execution to detect suspicious behavioral patterns such as the propagation of null pointers or object layouts and accesses that impede particular JIT optimizations [@jalangi2], to verify automated optimizations [@alive2], or to assist programmers with the exploration of disassemblied code [@ponce].
+
+To our knowledge, few solutions are widespread that assist programmers with writing tests [@crosshair; @goodman2018deepstate].
+An exception is IntelliTest which has been integrated in Microsoft Visual Studio since 2015 and thus is available to a potentially large number of users [@intellitest].^[
+  IntelliTest is available in the Enterprise edition of Visual Studio.
+  More than 150,000 companies have subscribed to Visual Studio [@enlyft], and Microsoft provides free access to the Visual Studio Enterprise for students through the *Azure Education Hub* program [@educationhub].
+  However, the actual number of customers who work with C#/.NET Framework is unknown.
+]
+
+## Impact for Vulnerability Detection
+
+In the past two decades, symbolic execution tools have had a particular impact for detecting vulnerabilities (see \cref{program-analysis}).
+Microsoft has used their in-house concolic execution engine [SAGE]{.smallcaps} to find more than 30% of all bugs in Windows 7 that were fixed prior to the release, has later established the tool as a standard component of their internal testing pipelines, and is continuously running it 24/7 on more than 200 machines to reduce the number of exploits in several products [@godefroid2012sage; @bounimova2013billions].
+
+In research, the popular free open-source library GNU Core Utils (containing tools such as `cat`, `tee`, and `wc`) has established as a benchmark for evaluating the performance of symbolic execution engines.
+The entire library comprises 89 binaries with 72 kLOC (thousands lines of code) and the original test suite had a coverage of 67.6% LCOV (percent of lines covered) [@cadar2008klee].
+In 2008, [KLEE]{.smallcaps} detected 56 yet unknown bugs and crashes in the library within 1 hour per binary and increased the overall code coverage to 84.5% [@cadar2008klee].
+Later, other tools detected further bugs in the library while reducing the operational costs [@marinescu2012make; @kuznetsov2012efficient].
+In 2012, [Mayhem]{.smallcaps} reached a coverage of 97.6% LCOV within 1 hour per binary for a subset of the library [@cha2012unleashing].
+
+Researchers have also demonstrated the ability of vulnerability detection for other software systems:
+Inter alia, bugs and vulnerabilities were found in BusyBox [@cadar2008klee], the Linux kernel [@cha2012unleashing], Minix [@cadar2008klee], and Windows [@cha2012unleashing].
+[MergePoint]{.smallcaps} reached particularly remarkable results by discovering more than 11,000 bugs in the entire Debian kernel [@avgerinos2014enhancing] (consisting of more than 33,000 binaries and 679 MSLOC (millions of source lines of code) [@debian]).
+This analysis took them 18 CPU-months but benefited from massive parallelization.
+They also estimated that the operational costs for renting virtual servers in a data center would correspond to $0.28 per discovered bug, showing that symbolic execution for security analysis can be financially worthwhile given the potentially high costs of zero-day exploits that are discovered in the public [@godefroid2012sage; @castillo2016dao; @perlroth2021untold].
+
 # Discussion
 
 # Related Work
