@@ -2,7 +2,7 @@ REPORT_FILE=report
 
 PANDOC=pandoc
 
-PANDOC_OPTIONS=--from markdown --template ./eisvogel.tex --number-sections --listings --bibliography=bibliography.bib --biblatex --filter pandoc-fignos
+PANDOC_OPTIONS=--from markdown --template ./eisvogel.tex --number-sections --listings --bibliography=bibliography.bib --biblatex --filter ./filters/gh_theme_context.py --filter pandoc-fignos
 
 OUTPUT_FOLDER=output
 
