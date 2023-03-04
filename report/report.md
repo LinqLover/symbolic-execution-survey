@@ -39,7 +39,7 @@ In \cref{approach}, we describe the fundamental operating principle of symbolic 
 In \cref{technical-challenges}, we provide an overview of challenges for symbolic execution and existing solution approaches.
 We present different use cases and tools for symbolic execution in \cref{applications} and examine their impact on research and industry in \cref{impact}.
 In \cref{discussion}, we discuss limitations and usage considerations for different symbolic execution tools.
-We classify some alternative approaches and literature in \cref{related-work} and finally give a conclusion in \cref{conclusion}.
+We classify some alternative approaches in \cref{related-tools} and finally give a conclusion in \cref{conclusion}.
 
 # Approach
 
@@ -275,24 +275,40 @@ An exception is IntelliTest which has been integrated in Microsoft Visual Studio
 
 ## Impact for Vulnerability Detection
 
-In the past two decades, symbolic execution tools have had a particular impact for detecting vulnerabilities (see \cref{program-analysis}).
+In the past two decades, symbolic execution tools have had a particular impact regarding detecting vulnerabilities (see \cref{program-analysis}).
 Microsoft has used their in-house concolic execution engine [SAGE]{.smallcaps} to find more than 30% of all bugs in Windows 7 that were fixed prior to the release, has later established the tool as a standard component of their internal testing pipelines, and is continuously running it 24/7 on more than 200 machines to reduce the number of exploits in several products [@godefroid2012sage; @bounimova2013billions].
 
-In research, the popular free open-source library GNU Core Utils (containing tools such as `cat`, `tee`, and `wc`) has established as a benchmark for evaluating the performance of symbolic execution engines.
+In research, the popular free open-source library GNU Core Utils (containing tools such as `cat`, `tee`, and `wc`) has been established as a benchmark for evaluating the performance of symbolic execution engines.
 The entire library comprises 89 binaries with 72 kLOC (thousands lines of code) and the original test suite had a coverage of 67.6% LCOV (percent of lines covered) [@cadar2008klee].
-In 2008, [KLEE]{.smallcaps} detected 56 yet unknown bugs and crashes in the library within 1 hour per binary and increased the overall code coverage to 84.5% [@cadar2008klee].
+In 2008, [KLEE]{.smallcaps} detected 56 yet unknown bugs and crashes in the library within 1 hour per binary and increased the overall code coverage to 84.5% (see \cref{fig:klee-exploits}) [@cadar2008klee].
 Later, other tools detected further bugs in the library while reducing the operational costs [@marinescu2012make; @kuznetsov2012efficient].
-In 2012, [Mayhem]{.smallcaps} reached a coverage of 97.6% LCOV within 1 hour per binary for a subset of the library [@cha2012unleashing].
+In 2012, [Mayhem]{.smallcaps} reached a coverage of 97.6% LCOV for a subset of the library within 1 hour per binary [@cha2012unleashing].
 
 Researchers have also demonstrated the ability of vulnerability detection for other software systems:
 Inter alia, bugs and vulnerabilities were found in BusyBox [@cadar2008klee], the Linux kernel [@cha2012unleashing], Minix [@cadar2008klee], and Windows [@cha2012unleashing].
 [MergePoint]{.smallcaps} reached particularly remarkable results by discovering more than 11,000 bugs in the entire Debian kernel [@avgerinos2014enhancing] (consisting of more than 33,000 binaries and 679 MSLOC (millions of source lines of code) [@debian]).
-This analysis took them 18 CPU-months but benefited from massive parallelization.
+This analysis took them 18 CPU-months but benefited from massive parallelization across multiple machines.
 They also estimated that the operational costs for renting virtual servers in a data center would correspond to $0.28 per discovered bug, showing that symbolic execution for security analysis can be financially worthwhile given the potentially high costs of zero-day exploits that are discovered in the public [@godefroid2012sage; @castillo2016dao; @perlroth2021untold].
 
 # Discussion
 
-# Related Work
+Symbolic execution has proven as useful for several applications such as bug detection, test generation, or program exploration.
+Programmers can improve the test coverage of their systems and gain faster insights in the behavior and edge cases of programs while reducing the effort and distractions of considering context.
+Still, symbolic execution imposes several limitations and cost factors:
+depending on the complexity of an application, performance may be insuitable for interactive response times or even require hours to days and considerable financial resources.
+The coverage of execution paths is limited and depends on the coupling of a software to blackboxes and environments, algebraic complexity of algorithms, and usage of lookup constructs such as pointers or large dictionaries.
+In many cases, programmers are required to provide additional configuration to model blackboxes or specify some context, and generated artifact may suffer from poor readability or sustainability.
+
+Thus, programmers need to evaluate the suitability of symbolic execution tools for particular software projects by weighting these costs against the potential value of tools.
+For instance, for safety- or security-critical applications that involve domains such as finances or user data, programmers might prioritize high quality and dependability of their software over a fast and inexpensive development process.
+The value of tools that aim to improve the programming experience and aid program understanding mainly correlates to the implementational complexity of projects.
+
+# Related Tools
+
+Next to symbolic execution, programmers may also consider alternative approaches and tools.
+*Static analysis tools* [@gosain2015static; @emanuelsson2017comparative; @li2018survey] and *fuzzing tools* [@zeller2019fuzzing; @garus2023fuzzing] typically provide significantly better performance but deliver lower precision and selectivity as they cannot systematically scan all execution paths.
+Still, these techniques are more popular and, for many languages and environments, may surpass symbolic execution in terms of quantity and maturity of available solutions.
+*Generative AI software* such as [GitHub Copilot]{.smallcaps} or [ChatGPT]{.smallcaps} forms another category of tools that can practically assist programmers with analyzing programs or generating tests, but their results occasionaly suffer from poor and unreliable quality especially for unpopular domains, and programmers often experience the workflow as awkward and unsatisfying [@barke2022grounded; @vaithilingam2022expectation; @sobania2023analysis].
 
 # Conclusion
 
