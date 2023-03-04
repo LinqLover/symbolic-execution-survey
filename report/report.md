@@ -239,7 +239,7 @@ Finally, performance and theories of symbolic executors are limited, causing lon
 
 Another category of symbolic execution tools support programmers in *reverse engineering* tasks by allowing them to explore the captured behavior of executed units through alternative representations.
 
-*Microsoft [IntelliTest]{.smallcaps}* summarizes the behavior of a method by constructing a table of input arguments, return values, and optionally user-specified expressions from the symbolic execution paths (see +@fig:intellitest) [@intellitest; @tillmann2008pex].
+Microsoft [IntelliTest]{.smallcaps} summarizes the behavior of a method by constructing a table of input arguments, return values, and optionally user-specified expressions from the symbolic execution paths (see +@fig:intellitest) [@intellitest; @tillmann2008pex].
 Programmers can benefit from this to understand methods and explore their edge cases without studying the implementation.
 
 ![Screenshot of the [IntelliTest]{.smallcaps} explorer in Microsoft Visual Studio summarizing the behavior of the method `Versions.Compare()` [@intellitest]. Each result represents a different equivalence class of inputs (arguments) and outputs (return value or raised exception) that are caused by the same code path. On the right, the test code for reproducing the example (generated using [Pex]{.smallcaps}, see \cref{testing}) is shown.](./figures/IntelliTest_explore+l.png#gh-light-mode-only){#fig:intellitest}![Screenshot of the [IntelliTest]{.smallcaps} explorer in Microsoft Visual Studio summarizing the behavior of the method `Versions.Compare()` [@intellitest]. Each result represents a different equivalence class of inputs (arguments) and outputs (return value or raised exception) that are caused by the same code path. On the right, the test code for reproducing the example (generated using [Pex]{.smallcaps}, see \cref{testing}) is shown.](./figures/IntelliTest_explore+d.png#gh-dark-mode-only){#fig:intellitest}
@@ -348,7 +348,7 @@ as any variables are possibly assigned symbolic expressions, the executor cannot
   The terms "dynamic symbolic execution" and "concolic execution" are used inconsistently in the literature.
   In this report, we adhere to the taxonomy of Cadar et al. who use "dynamic symbolic execution" as an umbrella term for execution-generated testing and concolic execution [@cadar2013symbolic] (instead of the taxonomy of Baldoni et al. who use both terms in the opposite way [@baldoni2018survey]).]
 
-One form of DSE is *execution-generated testing* (EGT) which interleaves symbolic and concrete execution [@cadar2005execution].
+One form of DSE is *execution-generated testing* (EGT) which interleaves symbolic and concrete execution\ [@cadar2005execution].
 When a blackbox is called, the executor concretizes any symbolic arguments before passing them to the blackbox by requesting a solution for the current constraint set from the SMT solver.
 
 *Concolic execution* (a portmanteau of "concrete" and "symbolic") is another form of DSE which executes a program both in concrete and symbolic style simultaneously [@sen2005cute; @godefroid2008automated].
@@ -394,7 +394,7 @@ Complete symbolic execution of a software system can take hours up to months [@a
 In its general form, programmers can specify an allow- or denylist of units (e.g., modules, classes, or methods) to be analyzed.
 All non-selected parts are treated as blackboxes: outside of the selected parts, the program can be executed concretely without generating new execution paths.
 However, this approach reduces the completeness of the analysis; for instance, not all possible return values or side effects from a call to a skipped function will be covered.
-*Chopped symbolic execution* can partially restore the lost completeness by employing static analysis of the skipped function's behavior [@trabish2018chopped].
+*Chopped symbolic execution* can partially restore the lost completeness by employing static analysis of the skipped function's behavior\ [@trabish2018chopped].
 
 Selective symbolic execution is well combinable with compositional symbolic execution where single units can be analyzed in isolation.
 
@@ -440,7 +440,7 @@ These strategies commonly overlap with techniques employed for SSE (\cref{static
 *Path pruning* or *path subsumption* strategies detect identical execution paths and eliminate doubles [@baldoni2018survey, sec. 5.4; @yang2019advances, sec. 4.2].
 By storing pre- and postconditions, they can also detect *equivalent* execution paths that only differ in side effects or values that are irrelevant to the remaining control flow.
 
-*Path merging* strategies avoid path multiplicities by combining similar execution paths [@avgerinos2014enhancing; @baldoni2018survey, sec. 5.6; @yang2019advances, sec. 4.3].
+*Path merging* strategies avoid path multiplicities by combining similar execution paths [@kuznetsov2012efficient; @avgerinos2014enhancing; @baldoni2018survey, sec. 5.6; @yang2019advances, sec. 4.3].
 The state of merged execution paths contains conditional constraints and conditional expressions in the symbolic store.
 To weigh up the reduced costs for execution against the additional pressure on the SMT solver, they employ several heuristics.
 Among others, these heuristics take into account the following instruction types and the static CFG of a program to predict the solver costs.
@@ -452,7 +452,7 @@ Depending on the architecture of the software under investigation, the available
 ## Environment Models
 
 To avoid blackboxes, programmers can provide models to emulate parts of the environment [@baldoni2018survey, sec. 4].
-Similar to unit testing, they can configure fakes and stubs that are whiteboxes to the symbolic executor [@deHalleux2010moles].
+Similar to unit testing, they can configure fakes and stubs that are whiteboxes to the symbolic executor\ [@deHalleux2010moles].
 For instance, they can replace the real filesystem with a virtual filesystem or redirect all requests to a remote server to a stub.
 Fakes can model uncertainties about the original environment by creating new symbolic variables, e.g., to represent the contents of a file or to decide whether a server is reachable.
 For large blackboxes, some tools approach to automate model generation.
