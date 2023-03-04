@@ -312,13 +312,9 @@ Still, these techniques are more popular and, for many languages and environment
 
 # Conclusion
 
-<!--
-NOTE: The eisvogel template does not support placement of references before appendix.
-# References
-
-::: {#refs}
-:::
--->
+Symbolic execution is a dynamic program analyis technique which systematically identifies and examines the most execution paths of a program without requiring programmers to provide concrete inputs.
+It is used in several types of programming tools to assist programmers with tasks such as bug detection, exploit generation, testing, and program comprehension and has been successfully adopted in the industry for both internal purposes and commercial products.
+Still, performance and completeness of symbolic execution are limited, and programmers face a possible overhead for specifying required context about the environment of the program.
 
 \appendix
 
