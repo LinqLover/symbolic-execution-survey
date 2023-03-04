@@ -40,6 +40,7 @@ In \cref{technical-challenges}, we provide an overview of challenges for symboli
 We present different use cases and tools for symbolic execution in \cref{applications} and examine their impact on research and industry in \cref{impact}.
 In \cref{discussion}, we discuss limitations and usage considerations for different symbolic execution tools.
 We classify some alternative approaches in \cref{related-tools} and finally give a conclusion in \cref{conclusion}.
+Additional, we provide details on different implementation strategies (\cref{implementation-strategies}) and further resources (\cref{further-reading}) in the appendices.
 
 # Approach
 
@@ -489,3 +490,20 @@ For instance, some solvers favor numbers with small absolutes over random intege
 Today, major challenges to symbolic execution include path explosion (\cref{path-management}) and solver performance (\cref{constraint-solvers}).
 Several approaches employ the results of efficient static analysis to assist the symbolic execution engine with these challenges.
 Another open problem is the analysis of concurrent programs with an exponential number of possible execution orders [@yang2019advances, sec. 7].
+
+# Further Reading
+
+Here, we recommend a shortlist of additional resources for deepening the field of symbolic execution.
+
+Online resources.
+:   [@luckow2017awesome] provides a collection of papers, educational materials, and implementations of symbolic execution techniques.
+    [@papers] gives a more detailed overview of relevant papers.
+    [@vartanov2017history] summarizes the history of symbolic execution engines and solvers in the form of graphical timelines.
+
+Surveys.
+:   [@cadar2013symbolic] gives an initial overview of symbolic execution approaches and implementations.
+    [@baldoni2018survey] provides a comprehensive review of implementational techniques and considerations.
+    [@yang2019advances] describes present challenges and trends.
+    
+    To handle the path explosion problem, search strategies are a much-noticed solution approach (\cref{path-selection}).
+    [@liu2017survey] and [@sabbaghi2020systematic] survey this subfield of symbolic execution in detail.
