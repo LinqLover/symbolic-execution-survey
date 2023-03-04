@@ -9,6 +9,7 @@ sansfont: "Georgia"
 filters:
 - ./filters/gh_theme_context.py
 - pandoc-fignos
+biblatexoptions: [urldate=iso, date=iso, seconds=true]
 header-includes: |
   \usepackage{float}
   \newfloat{lstfloat}{tbhp}{lop}
