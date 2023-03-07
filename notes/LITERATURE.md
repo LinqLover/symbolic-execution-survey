@@ -373,7 +373,7 @@ Meta:
 
 Findings:
 
-- **Contributions:** in-depth overview of theory, approaches, and challenges; collection of implementations; references to surveys (TODO)
+- **Contributions:** in-depth overview of theory, approaches, and challenges; collection of implementations; references to surveys
 
 ## Software and Security Testing
 
@@ -501,7 +501,6 @@ Meta:
 Findings:
 
 - **Contributions:** basic overview, limitations, list of applications
-- TODO: check out tools; maybe read footnotes
 
 ## Wikipedia Symbex
 
@@ -514,4 +513,3 @@ Meta:
 Findings:
 
 - **Contributions:** basic overview, limitations, list of applications
-- TODO: check out tools; read footnotes
