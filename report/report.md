@@ -7,7 +7,8 @@ subauthor:
 - Hasso Plattner Institute, University Potsdam
 titlepage: true
 abstract: |
-  TODO: Abstract
+  Symbolic execution is a dynamic program analysis technique that attempts to identify all execution paths of a program without requiring programmers to specify inputs.
+  We describe the operating principle of symbolic execution, give an overview of different applications for vulnerability detection, testing, and program comprehension and their impact, and discuss practicality and limitations of the technique.
 mainfont: "Georgia"
 sansfont: "Georgia"
 filters:
