@@ -1,6 +1,10 @@
 ---
 title: "Symbolic Execution and Applications"
+subtitle: Advanced Programming Tools Seminar 2022/2023
 author: [Christoph Thiede]
+subauthor:
+- "Advisor: Patrick Rein"
+- Hasso Plattner Institute, University Potsdam
 titlepage: true
 abstract: |
   TODO: Abstract

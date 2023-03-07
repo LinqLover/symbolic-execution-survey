@@ -918,7 +918,11 @@ $else$
   {\Large \textsf{$subtitle$}}
   $endif$
   \vskip 2em
-  \noindent {\Large \textsf{$for(author)$$author$$sep$, $endfor$}}
+  \noindent {\Large \textsf{$for(author)$$author$$sep$, $endfor$}}\\
+  \noindent {
+    $for(subauthor)$
+    \Large \textsf{$subauthor$}\\
+    $endfor$}
   \vfill
 }
 $endif$
