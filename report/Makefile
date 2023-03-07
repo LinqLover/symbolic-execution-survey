@@ -20,6 +20,10 @@ pdf : tex .output-folder
 tex :
 	$(PANDOC) $(REPORT_FILE).md -o $(REPORT_FILE).tex $(PANDOC_OPTIONS)
 
+txt : tex
+	$(PANDOC) --to=plain --wrap=none $(REPORT_FILE).tex -o $(REPORT_FILE).txt
+# unfortunately misses title page and abstract
+
 full-pdf : tex .output-folder
 	$(PDFLATEX) $(REPORT_FILE).tex
 	biber $(OUTPUT_FOLDER)/$(REPORT_FILE)
