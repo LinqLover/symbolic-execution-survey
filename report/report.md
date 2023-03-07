@@ -34,7 +34,7 @@ Dynamic analysis tools, on the other hand, examine programs by observing the beh
 
 While static analysis tools typically offer higher performance, they often offer lower precision or selectivity than dynamic analysis.
 For example, static type flow analyzers cannot reason about metaprogramming constructs such as Python's `getattr` function or JavaScript's `Function.prototype.bind()` method, and static performance prediction tools cannot account for the bottlenecks of an individual hardware configuration.
-However, while dynamic analysis tools typically provide higher quality results, they require *context* for running an application and reaching all its different states.
+However, while dynamic analysis tools typically provide higher-quality results, they require *context* for running an application and reaching all its different states.
 Programmers can provide context by preparing a set of possible user interactions or by creating a comprehensive test suite, but this is a costly process, as these artifacts often do not yet exist or cover only a small portion of the code base.
 
 *Symbolic execution* addresses this problem by automatically discovering and analyzing the execution paths of a program while requiring little or no specification on the part of programmers.
@@ -70,8 +70,7 @@ Together, the symbolic memory and the constraint set of an execution path define
 All execution paths are contained in the *symbolic execution tree* of the program where each node represents a symbolic state and each edge represents a new path constraint.
 For each leaf, i.e., each completed execution path, the symbolic execution engine can generate a concrete set of input values from the constraint, and programmers can use these concrete inputs to reproduce the same execution path in a regular non-symbolic context [@cadar2013symbolic; @cadar2008klee].
 
-<!-- TODO: change order of introduced definitions? -->
-A critical component of any symbolic execution engine is a *satsfiability module theories solver* (*SMT solver*) which decides whether a symbolic branch condition can be satisfied and generates a concrete solution for a constraint set [@baldoni2018survey; @deMoura2008z3].
+A critical component of any symbolic execution engine is a *satisfiability modulo theories solver* (*SMT solver*) which decides whether a symbolic branch condition can be satisfied and generates a concrete solution for a constraint set [@baldoni2018survey; @deMoura2008z3].
 SMT solvers are a special kind of *SAT solvers* that test the *satisfiability* of a constraint set *modulo* ("within") a set of *theories*.
 Theories are axiomatic systems for domain-specific algebras that enable the solver to reason not only about Boolean logic but also about predicates involving various data types.
 Common theories describe arithmetic, bitwise operations/integers with overflow semantics, or strings.
@@ -93,7 +92,7 @@ void foo(int a, int b, int c) {
   \end{lstlisting}
 \end{lstfloat}
 
-![The symbolic execution tree and concrete input sets for each path after analyzing the `foo()` method from \cref{lst:foo-code}. The symbolic variables $\alpha, \beta, \gamma$ represent the assigned values for the input variables `a`, `b`, and `c`, respectively](./figures/symbex-tree.png){#fig:foo-tree width=65%}
+![The symbolic execution tree and concrete input sets for each path after analyzing the `foo()` method from \cref{lst:foo-code}. The symbolic variables $\alpha, \beta, \gamma$ represent the assigned values for the input variables `a`, `b`, and `c`, respectively.](./figures/symbex-tree.png){#fig:foo-tree width=65%}
 
 # Technical Challenges
 
@@ -153,7 +152,7 @@ Path explosion, space explosion. \label{path-explosion}
 :   For common programming constructs, the total number of execution paths can be superpolynomial in the number of conditional statements.
     For example, a program that checks a symbolic condition $n$ times within a loop or recursive function call can produce up to $2^n$ execution paths.
     If the break condition itself is symbolic, each check of the condition can generate additional execution paths, leading to an infinite size of the execution tree.
-    In reality, this results in an impractical performance even for symbolic execution of many small programs [@cadar2013symbolic; @baldoni2018survey].
+    In reality, this results in an impractical performance even for the symbolic execution of many small programs [@cadar2013symbolic; @baldoni2018survey].
     
     Common solutions to this problem include restricting and prioritizing execution paths (\cref{path-selection}), static symbolic execution (\cref{static-symbolic-execution}) and function summarization (\cref{path-summarization}), and selective symbolic execution (\cref{selective-symbolic-execution}).
 
@@ -161,7 +160,7 @@ Environments, blackboxes.
 :   Traditional symbolic execution assumes a whitebox program where the symbolic executor has access to all instructions.
     However, practical programs often interact with blackboxes, including system calls to the operating system (OS) or primitive calls to the virtual machine (VM) [@avgerinos2014enhancing; @baldoni2018survey].
     At the hardware level, all I/O operations are blackboxes, including file system accesses, network communication, and hardware-accelerated computation [@cadar2005execution; @baldoni2018survey].
-    For symbolic executors that operate on the source code or on intermediate representations of programs, even precompiled library binaries without sources are a blackbox [@mirzaei2012testing].
+    For symbolic executors that operate on the source code or intermediate representations of programs, even precompiled library binaries without sources are a blackbox [@mirzaei2012testing].
     Importantly, event-driven applications that are built around a framework following the inversion of control principle [@johnson1988designing] can only be executed symbolically in the context of the framework's implementation which is often complex (see \hyperref[path-explosion]{path explosion}) or unknown [@mirzaei2012testing].
     Finally, concurrent programs typically rely on a blackbox scheduler that is part of the OS or the VM [@yang2019advances, sec. 7].
     
@@ -247,13 +246,13 @@ Programmers can benefit from this to understand methods and explore their edge c
 
 Other tools use symbolic execution to aid program understanding through *symbolic execution debugging* where programmers can debug a program without providing concrete entrypoints (see +@fig:sed) [@hentschel2019symbolic; @sed; @ponce].
 All variables are initialized symbolically, and during debugging, programmers can interactively advance and explore a symbolic execution tree of the selected method.
-This style of debugging can help programmers evade irrelevant or distracting context, but they also may experience symbolic expressions in the inspected program state as too abstract and sophisticated.
+This style of debugging can help programmers evade irrelevant or distracting context, but they may also experience symbolic expressions in the inspected program state as too abstract and sophisticated.
 The size of the symbolic execution tree can be overwhelming, and its structure can be confusing because it mismatches common control flow graphs for patterns such as loops.
-Thus, the value of symbolic execution debugging tools is likely maximal for codebases with a high complexity and a poor readability; for instance, several disassembly tools support symbolic execution debugging [@ponce].
+Thus, the value of symbolic execution debugging tools is likely maximal for codebases with high complexity and poor readability; for instance, several disassembly tools support symbolic execution debugging [@ponce].
 
 ![Screenshot of the *Symbolic Execution Debugger* ([SED]{.smallcaps}) for Eclipse while exploring the execution tree of a `QuickSort` implementation in Java [@hentschel2019symbolic; @sed]. By selecting a node in the tree, programmers can inspect the associated symbolic state in the remaining panes and advance the execution of the code path step by step.](./figures/SED.png){#fig:sed}
 
-Like symbolic testing tools, symbolic reverse engineering tools suffer from the limited performance and coverage of execution engines, and programmers are required to specify additional context to explore code that interacts with an external environment or relies on implicit assumptions.
+Like symbolic testing tools, symbolic reverse engineering tools suffer from the limited performance and coverage of execution engines, and programmers need to specify additional context to explore code that interacts with an external environment or relies on implicit assumptions.
 
 # Impact
 
@@ -261,29 +260,29 @@ In this section, we review the adoption of symbolic execution and its impact on 
 
 ## Adoption of Symbolic Execution Tools
 
-As an example, we evaluate the adoption of symbolic execution tools in the open source community by considering a selected sample of repositories on GitHub that use symbolic execution concepts, are actively maintained, and have an above-average popularity (at least 200 stars).
+As an example, we evaluate the adoption of symbolic execution tools in the open-source community by considering a selected sample of repositories on GitHub that use symbolic execution concepts, are actively maintained, and have above-average popularity (at least 200 stars).
 The largest group of symbolic execution tools matching these criteria are frameworks and libraries that enable programmers to perform a dynamic analysis of their systems at a low or medium level of abstraction.
 For example, many tools offer APIs for symbolic execution of particular instructions or methods and for inspection of the resulting execution tree [@shoshitaishvili2016sok; @desclaux2012miasm; @saudel2015triton].
 A large number of tools provide means for semi-automated vulnerability detection and exploit generation [@mythril; @onefuzz].
 Most tools operate on binaries\ [@desclaux2012miasm; @saudel2015triton; @onefuzz; @poeplau2020symbolic; @alive2; @chipounov2011s2e]; however, some solutions target JavaScript applications [@jalangi2] or smart contracts running in the Ethereum VM [@mossberg2019manticore; @mythril].
-Some tools also use symbolic execution to detect suspicious behavioral patterns such as null pointer propagation or object layouts and accesses that prevent particular JIT optimizations [@jalangi2], to verify automated optimizations [@alive2], or to help programmers explore disassemblied code [@ponce].
+Some tools also use symbolic execution to detect suspicious behavioral patterns such as null pointer propagation or object layouts and accesses that prevent particular JIT optimizations [@jalangi2], to verify automated optimizations [@alive2], or to help programmers explore disassembled code\ [@ponce].
 
-To our knowledge, there are few widely adopted symbolic execution tools that assist programmers with writing tests [@crosshair; @goodman2018deepstate].
+To our knowledge, few widely adopted symbolic execution tools assist programmers with writing tests\ [@crosshair; @goodman2018deepstate].
 An exception is [IntelliTest]{.smallcaps} which has been integrated into Microsoft Visual Studio since 2015 and is thus available to a potentially large number of users [@intellitest].^[
   [IntelliTest]{.smallcaps} is available in the Enterprise edition of Microsoft Visual Studio.
-  More than 150,000 organizations have subscribed to any commercial edition Visual Studio [@enlyft], and Microsoft provides free access to Visual Studio Enterprise for students through the *Azure Education Hub* program [@educationhub].
+  More than 150,000 organizations have subscribed to any commercial edition of Visual Studio [@enlyft], and Microsoft provides free access to Visual Studio Enterprise for students through the *Azure Education Hub* program [@educationhub].
   However, the actual number of users working with C# and the .NET Framework is unknown.
 ]
 
 ## Impact on Vulnerability Analysis
 
 Over the past two decades, symbolic execution tools have had a particular impact on vulnerability detection (see \cref{program-analysis}).
-Microsoft used its in-house concolic execution engine [SAGE]{.smallcaps} to find more than 30% of all bugs in Windows 7 that were fixed before the release, has later established the tool as a standard part of its internal testing pipelines, and is continuously running it on more than 200 machines 24/7 to reduce the number of exploits in several products [@godefroid2012sage; @bounimova2013billions].
+Microsoft used its in-house concolic execution engine [SAGE]{.smallcaps} to find more than 30% of all bugs in Windows 7 that they fixed before the release, has later established the tool as a standard part of its internal testing pipelines, and is continuously running it on more than 200 machines 24/7 to reduce the number of exploits in several products [@godefroid2012sage; @bounimova2013billions].
 
 In research, the popular open-source library GNU Core Utils (which includes tools such as `cat`, `tee`, and `wc`) has been established as a benchmark for evaluating the performance of symbolic execution engines.
-Originally, the entire library consists of 89 binaries with 72 kLOC (thousands lines of code) and the test suite had a coverage of 67.6% LCOV (percent of lines covered) [@cadar2008klee].
+Originally, the entire library consisted of 89 binaries with 72 kLOC (thousands of lines of code), and the test suite had a coverage of 67.6% LCOV (percent of lines covered) [@cadar2008klee].
 In 2008, [KLEE]{.smallcaps} found 56 previously unknown bugs and crashes in the library within 1 hour per binary and generated crash tests that increased the total code coverage to 84.5% (see \cref{fig:klee-exploits}) [@cadar2008klee].
-Later, other tools detected further bugs in the library while reducing the operational costs [@marinescu2012make; @kuznetsov2012efficient].
+Later, other tools detected further bugs in the library while reducing operational costs [@marinescu2012make; @kuznetsov2012efficient].
 In 2012, [Mayhem]{.smallcaps} achieved a coverage of 97.6% LCOV in a subset of the library within 1 hour per binary [@cha2012unleashing].
 
 Researchers have also demonstrated the potential of vulnerability detection in other software systems:
@@ -303,7 +302,7 @@ In many cases, programmers are required to provide additional configuration to m
 
 Thus, programmers must evaluate the suitability of symbolic execution tools for particular software projects by weighing these costs against the potential value of the tools.
 For example, for safety- or security-critical applications involving domains such as finance or user data, programmers may prioritize high quality and dependability of their software over a fast and inexpensive development process.
-The value of tools that aim to improve the programming experience and aid program understanding depends pirimarly on the implementation complexity of projects.
+The value of tools that aim to improve the programming experience and aid program understanding depends primarily on the implementation complexity of projects.
 
 # Related Tools
 
@@ -317,7 +316,7 @@ Nevertheless, these techniques are more popular and, for many languages and envi
 
 Symbolic execution is a dynamic program analysis technique that systematically identifies and examines most of the execution paths of a program without any concrete inputs from programmers.
 It is used in several types of programming tools to assist programmers with tasks such as vulnerability detection, exploit generation, testing, and program comprehension, and it has been successfully adopted by the industry for both internal purposes and commercial products.
-Still, the performance and completeness of symbolic execution is limited, and programmers face a potential overhead for specifying required context about the environment of the program.
+Still, performance and completeness of symbolic execution are limited, and programmers face a potential overhead for specifying required context about a program's environment.
 
 \appendix
 
@@ -338,14 +337,14 @@ While online symbolic execution processes fewer instructions in total, it mainta
 However, online symbolic executors can reduce memory consumption by using copy-on-write data structures to share common symbolic states among multiple execution paths [@baldoni2018survey].
 Offline symbolic execution does not share any resources between multiple execution paths, reducing the implementation overhead for resource isolation (see also \cref{environment-models}).
 
-*Hybrid symbolic executors* combine both online and offline execution styles to benefit from the improved performance of online execution until a memory boundary is reached [@cha2012unleashing].
+*Hybrid symbolic executors* combine both online and offline execution styles to benefit from the improved performance of online execution until they reach a memory boundary [@cha2012unleashing].
 At that point, they switch to an offline execution strategy and re-execute further execution paths from the beginning.
 
 ### Dynamic Symbolic Execution
 
 Traditional symbolic execution is unable to handle blackboxes:
 since any variable may be assigned a symbolic expression, the executor cannot pass it to a foreign system (e.g., when making a system call to the OS).
-*Dynamic symbolic execution* (DSE) overcomes this limitation by combining symbolic execution with normal concrete execution which assigns concrete values to variables [@cadar2013symbolic; @baldoni2018survey].^[
+*Dynamic symbolic execution* (DSE) overcomes this limitation by combining symbolic execution with normal concrete execution that assigns concrete values to variables [@cadar2013symbolic; @baldoni2018survey].^[
   The terms "dynamic symbolic execution" and "concolic execution" are used inconsistently in the literature.
   In this report, we adhere to the taxonomy of Cadar et al. who use "dynamic symbolic execution" as an umbrella term for execution-generated testing and concolic execution [@cadar2013symbolic] (instead of the taxonomy of Baldoni et al. who use both terms in the opposite way [@baldoni2018survey]).]
 
@@ -355,23 +354,23 @@ When a blackbox is invoked, the executor concretizes any symbolic arguments befo
 *Concolic execution* (a portmanteau of "concrete" and "symbolic") is another form of DSE that executes a program in both the concrete and symbolic styles simultaneously [@sen2005cute; @godefroid2008automated].
 Concrete execution maintains a concrete assignment of all variables and is used to direct the control flow and invoke blackboxes.
 Symbolic execution accompanies concrete execution to collect the symbolic constraints for the conditional branches taken.
-Once an execution path has been completed, further paths can be generated by negating single constraints from the collection and generating concrete input values for the next execution.
+Once an execution path has been completed, the executor creates further paths by negating single constraints from the collection and generating concrete input values for their execution.
 As a consequence, the analysis can center around practically relevant execution paths: for example, the concolic execution of a file parser could start with a real sample file and then explore edge cases in the parser for degenerate files by negating constraints [@godefroid2012sage].
 
 Concolic execution shifts the usage patterns of the SMT solver [@baldoni2018survey, sec. 2]:
-the solver is only requested once per execution path to generate constraints, eliminating the context switching overhead of invoking the solver at each conditional instruction.
+the solver is only requested once per execution path to generate constraints, eliminating the context-switching overhead of invoking the solver at each conditional instruction.
 If the solver is unable to find a solution for a constraint set, symbolic execution can skip some execution paths instead of inevitably aborting\ [@cadar2013symbolic, sec. 3].
 In practice, concolic execution is implemented by instrumenting the program to collect constraints and running the instrumented program offline in the regular OS or VM [@sen2007concolic; @poeplau2020symbolic].
 This also improves performance and reduces implementation costs by avoiding the indirection of a separate interpreter.
 
-However, neither EGT nor concolic execution uncover conditional branches inside blackboxes.
+However, neither EGT nor concolic execution uncovers conditional branches inside blackboxes.
 To improve the coverage of programs that interact with blackboxes, programmers can alternatively specify memory models (see \cref{memory-models}).
 
 ### Static Symbolic Execution
 
 *Static symbolic execution* (SSE) addresses the path explosion problem by deriving a static transformation of program parts instead of executing them [@avgerinos2014enhancing; @baldoni2018survey].
 SSE uses *function summary* and *loop summary* techniques to translate a function or a group of instructions, respectively, into an equivalent conditional symbolic expression (corresponding to a mathematical piecewise-defined function).
-For example, *compositional symbolic execution* analyzes individual program parts in isolation by treating each function call as a new symbolic expression and translates them into pairs of preconditions and postconditions [@yang2019advances, sec. 5].
+For example, *compositional symbolic execution* analyzes individual program parts in isolation by treating each function call as a new symbolic expression and translates them into pairs of preconditions and postconditions\ [@yang2019advances, sec. 5].
 SSE reduces the cost of executing a program multiple times and deciding or negating many constraint sets but increases the pressure on the SMT solver to handle conditional expressions; however, recent advances in solvers make this a worthwhile shift (see also \cref{constraint-solvers})\ [@avgerinos2014enhancing].
 Two limitations of SSE are that it cannot handle blackboxes and that it cannot follow any control flow patterns beyond basic conditional or loop jumps [@avgerinos2014enhancing].
 
@@ -384,7 +383,7 @@ Veritesting outperforms regular DSE by more than 70% [@avgerinos2014enhancing].
 
 Another approach to symbolic execution is *backward symbolic execution* (BSE) which explores the instructions and execution paths of a program in reverse order [@ma2011directed; @baldoni2018survey, sec. 2.3].
 One application of BSE is post-mortem debugging [@chen2014star].
-To identify the possible callers of a method, a statically generated control-flow graph (CFG) can be used.
+To identify the possible callers of a method, BSE uses a statically generated control-flow graph (CFG).
 Since methods can have multiple callers, BSE is also affected by the path explosion problem [@baldoni2018survey, sec. 2.3].
 
 ## Selective Symbolic Execution
@@ -392,40 +391,40 @@ Since methods can have multiple callers, BSE is also affected by the path explos
 Complete symbolic execution of a software system can take hours up to months [@avgerinos2014enhancing], but in many cases, programmers are only interested in the results of analyzing certain subsets or behaviors of the system.
 *Selective symbolic execution* includes several methods for selecting parts of the system for analysis [@chipounov2011s2e].
 In its general form, programmers can specify a whitelist or blacklist of units (e.g., modules, classes, or methods) to be analyzed.
-All unselected parts are treated as blackboxes: outside of the selected parts, the program can be executed concretely without generating new execution paths.
+All unselected parts are treated as blackboxes: outside of the selected parts, the program is executed concretely without generating new execution paths.
 However, this approach reduces the completeness of the analysis; for example, not all possible return values or side effects of a call to a skipped function will be covered.
 *Chopped symbolic execution* can partially restore the lost completeness by statically analyzing the behavior of skipped functions\ [@trabish2018chopped].
 
 Selective symbolic execution is well combinable with compositional symbolic execution where individual units can be analyzed in isolation (see \cref{static-symbolic-execution}).
 
 *Shadow symbolic execution* is another form of selective symbolic execution that selects parts for symbolic execution based on the changes to a software system since the previous run of the symbolic execution engine.
-In the context of continuous integration where tests and analysis are run on each new revision, this can significantly reduce the execution time or improve the coverage within a given time limit, respectively [@kuchta2018shadow]
+In the context of continuous integration where tests and analysis are run on each new revision, this can significantly reduce the execution time or improve the coverage within a given time limit [@kuchta2018shadow].
 
 With *preconditioned symbolic execution*, programmers can manually specify constraints on inputs or program behavior [@avgerinos2014automatic; @baldoni2018survey, sec. 5.5].
 For example, they can limit the size of certain buffers to 100 bytes, disallow non-ASCII characters, or provide regular grammars for generated inputs.
 
 Instead of binary filters, programmers can also specify a priority list of different program parts.
-In *directed symbolic execution* or *shortest-distance symbolic execution*, the selected program parts are analyzed first, followed by adjacent program parts based on their distance from the selected with respect to the static CFG of the system [@ma2011directed].
+In *directed symbolic execution* or *shortest-distance symbolic execution*, the selected program parts are analyzed first, followed by adjacent program parts based on their distance from the selected parts regarding the static CFG of the system [@ma2011directed].
 Similarly, *lazy expansion* explores the call graph of a test method top-down by initially treating all function calls as blackboxes and descending into them later\ [@majumdar2007latest].
 
 ## Path Management
 
-A major challenge in symbolic execution is path explosion where the number of execution paths can grow exponentially with the number of conditional branches or even infinitely.
+A major challenge in symbolic execution is path explosion since the number of execution paths can grow exponentially with the number of conditional branches or even infinitely.
 Practical symbolic execution engines typically combine multiple strategies to deal with the large size of the execution tree.
 
 ### Path Selection
 
-*Path selection* (also *branch prioritization* or *search strategies*) refers to the idea of maximizing the number of *relevant* execution paths within a given time limit [@liu2017survey; @baldoni2018survey, sec. 2.2].
+*Path selection* (also *branch prioritization* or *search strategies*) refers to maximizing the number of *relevant* execution paths within a given time limit [@liu2017survey; @baldoni2018survey, sec. 2.2].
 A criterion is defined for ordering execution paths, and the offline executor selects the next path based on that criterion.
 
 Naive path selection strategies include *depth-first search* (DFS) and *breadth-first search* (BFS) of the execution tree [@liu2017survey; @sabbaghi2020systematic].
 DFS is a prime example of search strategies that are not loop-safe:
-if the executor encounters an infinite subtree (e.g., a loop or recursive call with a symbolic break condition), the search will never complete, and the remaining tree will not be explored further.
+if the executor encounters an infinite subtree (e.g., a loop or recursive call with a symbolic break condition), the search will never complete, and the executor will never continue with the exploration the remaining tree.
 BFS, on the other hand, involves a maximum memory overhead for preserving incompletely explored parts of the execution tree and is unlikely to explore relevant deeply nested subtrees early [@liu2017survey].
 *Random search* combines the strengths of DFS and BFS by randomly selecting execution paths but is still not loop-safe [@liu2017survey].
 
 Other strategies assign scores or weights to different execution paths.
-*Generational search* maximizes code coverage by calculating the score of each new path from the relative coverage increase of the previous (generating) path [@godefroid2008automated; @sabbaghi2020systematic, p. 24f.].
+*Generational search* maximizes code coverage by calculating the score of each new path from the relative coverage increase of the previous (original) path [@godefroid2008automated; @sabbaghi2020systematic, p. 24f.].
 Execution paths can also be prioritized based on the mutation coverage of the generated tests or the coverage of the static CFG [@sabbaghi2020systematic, p. 18ff.].
 Some strategies use heuristics to predict the number of defects in subtrees based on certain instruction types or the historical density of defects in a unit (assuming not a normal distribution of the defect density across units but peaks in units written by particular authors on particular days) [@cha2012unleashing; @avgerinos2014automatic; @sabbaghi2020systematic, p. 26].
 Other heuristics attempt to detect repetitive loop iterations or recursive calls or use *fitness functions* for symbolic variables to prioritize solutions for them that trigger certain branches [@cadar2013symbolic, p. 9; @sabbaghi2020systematic, p. 27].
@@ -438,7 +437,7 @@ Many of these strategies overlap with techniques employed for SSE (\cref{static-
 ### Path Pruning and Merging
 
 *Path pruning* or *path subsumption* strategies detect identical execution paths and eliminate duplicates\ [@baldoni2018survey, sec. 5.4; @yang2019advances, sec. 4.2].
-By storing pre- and postconditions, they can also detect *equivalent* execution paths that differ only in side effects or values that are irrelevant to the remaining control flow.
+By storing pre- and postconditions, they can also detect *equivalent* execution paths that differ only in side effects or values irrelevant to the remaining control flow.
 
 *Path merging* strategies avoid path multiplicities by combining similar execution paths [@kuznetsov2012efficient; @avgerinos2014enhancing; @baldoni2018survey, sec. 5.6; @yang2019advances, sec. 4.3].
 The state of merged execution paths contains conditional constraints and conditional expressions in the symbolic store.
@@ -452,19 +451,19 @@ Depending on the architecture of the software under investigation, the available
 ## Environment Models
 
 To avoid blackboxes, programmers can provide models to emulate parts of the environment [@baldoni2018survey, sec. 4].
-Similar to unit testing, they can configure *fakes* and *stubs* that are whiteboxes to the symbolic executor\ [@deHalleux2010moles].
-For example, they can replace the real file system with a virtual file system or redirect all requests to a remote server to a stub object.
+Similarly to unit testing, they can configure *fakes* and *stubs* that are whiteboxes to the symbolic executor\ [@deHalleux2010moles].
+For example, they can replace the actual file system with a virtual file system or redirect all requests to a remote server to a stub object.
 Fakes can model uncertainties about the original environment by creating new symbolic variables, e.g., to represent the contents of a file or to decide whether a server is reachable.
 For large blackboxes, some tools offer approaches to automate model generation [@baldoni2018survey, sec. 4].
 
-For event-driven applications that pass control to a framework, such as a GUI framework for web pages or mobile applications, another approach is the compositional analysis of individual call targets that are exposed to the framework [@mirzaei2012testing].
+For event-driven applications that pass control to a framework, such as a GUI framework for web pages or mobile applications, another approach is the compositional analysis of individual call targets that the application exposes to the framework [@mirzaei2012testing].
 These *sub-call graphs* can then be composed based on regular grammars that describe possible call sequences.
 
 Other approaches attempt to disclose blackboxes by lifting binary code to a higher-level representation such as LLVM bitcode that is compatible with the symbolic executor [@cadar2008klee] or by employing virtualization techniques to emulate critical instructions [@chipounov2011s2e].
 
 ## Memory Models
 
-To handle symbolic pointers properly, symbolic execution engines must consider all possible symbolic states that can result from dereferencing the pointer (or looking up an array element, respectively) [@cadar2013symbolic; @baldoni2018survey, sec. 3].
+To handle symbolic pointers properly, symbolic execution engines must consider all possible symbolic states that can result from dereferencing a pointer (or looking up an array element, respectively) [@cadar2013symbolic; @baldoni2018survey, sec. 3].
 Since this is prone to path explosion, an alternative is to store a conditional expression in the symbolic memory that represents all possible results and can be handled from a single execution path (similar to path merging, see \cref{path-pruning-and-merging}).
 For write operations, it is also possible to use the unresolved symbolic address as a key in the symbolic store.
 However, for read operations, this approach would frequently lead to an explosion of the symbolic store, given the typical address space of programs.
@@ -472,10 +471,10 @@ However, for read operations, this approach would frequently lead to an explosio
 Other approaches set limits on the address space [@baldoni2018survey, sec. 3].
 For instance, symbolic execution engines can restrict symbolic pointers to all previously allocated addresses plus a canonical null pointer, or they can immediately report an error for an execution path that accesses unallocated space as this is considered an unsafe practice.
 Alternatively, offline engines can randomly concretize symbolic pointers, dynamically allocate new space, and (optionally lazily [@yang2019advances, sec. 6]) initialize it with new symbolic variables or data structures.
-Similar to preconditioned symbolic execution, engines can also allow programmers to specify custom constraints on newly initialized data.
+Similarly to preconditioned symbolic execution, engines can also allow programmers to specify custom constraints on newly initialized data.
 
 Some offline symbolic executors skip constraints that contain symbolic pointers during path generation but omit a part of the execution tree [@baldoni2018survey, sec. 3].
-Engines that follow a hybrid strategy only concretize some symbolic addresses depending on the access type (read or write instructions), the number of possible results, and other heuristics.
+Engines that follow a hybrid strategy concretize some symbolic addresses only depending on the access type (read or write instructions), the number of possible results, and other heuristics.
 
 ## Constraint Solvers
 
