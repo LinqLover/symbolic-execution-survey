@@ -20,7 +20,9 @@ header-includes: |
   \newfloat{lstfloat}{tbhp}{lop}
   \floatname{lstfloat}{Listing}
   \def\lstfloatautorefname{Listing}
-# lstfloatautorefname might be needed for hyperref/auroref
+  \usepackage[all]{nowidow}
+# lstfloatautorefname: might be needed for hyperref/auroref
+# nowidow: not sure why the template does not handle this
 ...
 
 # Introduction
