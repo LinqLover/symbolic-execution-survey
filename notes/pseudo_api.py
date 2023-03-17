@@ -22,5 +22,5 @@ table = dict(state.concrete(['bytes', state.return_value]) for state in tree.lea
 # vulnerability detection
 exploits = [
 	state.concrete('bytes') for path in tree.paths for state in path
-	if any(obj.filter > 3 for obj in state.objects if isinstance(obj, png.Parser)
+	if any(obj.filter > 3 for obj in state.objects if isinstance(obj, png.Parser))
 ]
